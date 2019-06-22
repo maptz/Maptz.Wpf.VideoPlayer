@@ -9,6 +9,7 @@
 [Bb]in
 [Dd]ebug*/
 [Rr]elease*/
+.vs/
 
 #Node Tools
 *.dat

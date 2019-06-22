@@ -1,0 +1,15 @@
+﻿<Application x:Class="Maptz.QuickVideoPlayer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Maptz.QuickVideoPlayer">
+    <Application.Resources>
+
+        <local:BoolVisibilityConverter x:Key="BoolVisibilityConverter"></local:BoolVisibilityConverter>
+        <local:MsToTimeCodeConverter x:Key="MsToTimeCodeConverter"></local:MsToTimeCodeConverter>
+        <local:MsToTimeSpanConverter x:Key="MsToTimeSpanConverter"></local:MsToTimeSpanConverter>
+        <local:ViewMsToViewportConverter x:Key="ViewMsToViewportConverter"></local:ViewMsToViewportConverter>
+        <local:TimeCodeToStringConverter x:Key="TimeCodeToStringConverter" />
+        <local:StringToUriConverter x:Key="StringToUriConverter" />
+
+    </Application.Resources>
+</Application>
