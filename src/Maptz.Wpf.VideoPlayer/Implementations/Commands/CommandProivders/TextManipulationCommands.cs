@@ -43,7 +43,7 @@ namespace Maptz.QuickVideoPlayer.Commands
             }
 
             textBox.SelectedText = str;
-            textBox.CaretIndex += textBox.SelectedText.Length;
+            //textBox.CaretIndex += textBox.SelectedText.Length;
             textBox.SelectionLength = 0;
         }
         private void InsertTimeCodeFromCursor()
@@ -119,12 +119,12 @@ namespace Maptz.QuickVideoPlayer.Commands
         }
         /* #endregion Private Methods */
         /* #region Public Properties */
-        public IAppCommand InsertTimeCodeFromCursorCommand => new AppCommand(nameof(InsertTimeCodeFromCursor), (object o) => this.InsertTimeCodeFromCursor(), new KeyChords(new KeyChord(Key.D1, ctrl: true)));
-        public IAppCommand InsertTimeCodeFromMarkInCommand => new AppCommand(nameof(InsertTimeCodeFromMarkIn), (object o) => this.InsertTimeCodeFromMarkIn(), new KeyChords(new KeyChord(Key.D2, ctrl: true)));
-        public IAppCommand NextGrammarPointCommand => new AppCommand("NextGrammarPoint", (object o) => this.MoveCursorToNextGrammar(), new KeyChords(new KeyChord(Key.Right, alt: true)));
-        public IAppCommand PreviousGrammarPointCommand => new AppCommand("PreviousGrammarPoint", (object o) => this.MoveCursorToNextGrammar(false), new KeyChords(new KeyChord(Key.Left, alt: true)));
+        public IAppCommand InsertTimeCodeFromCursorCommand => new AppCommand(nameof(InsertTimeCodeFromCursor), (object o) => this.InsertTimeCodeFromCursor(), new KeyChords(new KeyChord(Key.D1, ctrl: true)), new XamlIconSource(IconPaths3.pencil_plus));
+        public IAppCommand InsertTimeCodeFromMarkInCommand => new AppCommand(nameof(InsertTimeCodeFromMarkIn), (object o) => this.InsertTimeCodeFromMarkIn(), new KeyChords(new KeyChord(Key.D2, ctrl: true)), new XamlIconSource(IconPaths3.flag_plus));
+        public IAppCommand NextGrammarPointCommand => new AppCommand("NextGrammarPoint", (object o) => this.MoveCursorToNextGrammar(), new KeyChords(new KeyChord(Key.Right, alt: true)), new XamlIconSource(IconPaths3.page_next));
+        public IAppCommand PreviousGrammarPointCommand => new AppCommand("PreviousGrammarPoint", (object o) => this.MoveCursorToNextGrammar(false), new KeyChords(new KeyChord(Key.Left, alt: true)), new XamlIconSource(IconPaths3.page_previous));
         public IServiceProvider ServiceProvider { get; }
-        public IAppCommand SplitSentencesCommand => new AppCommand(nameof(SplitSentences), (object o) => this.SplitSentences(), new KeyChords(new KeyChord(Key.D6, ctrl: true)));
+        public IAppCommand SplitSentencesCommand => new AppCommand(nameof(SplitSentences), (object o) => this.SplitSentences(), new KeyChords(new KeyChord(Key.D6, ctrl: true)), new XamlIconSource(IconPaths3.text_subject));
         /* #endregion Public Properties */
         /* #region Public Constructors */
         public TextManipulationCommands(IServiceProvider serviceProvider)

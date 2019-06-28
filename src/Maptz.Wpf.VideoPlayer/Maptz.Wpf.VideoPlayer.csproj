@@ -14,6 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Implementations\Controls\VectorIcon.xaml" />
+    <None Remove="Implementations\Controls\WrappedTextBox.xaml" />
+    <None Remove="Styles.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FFME.Windows" Version="4.1.300" />
     <PackageReference Include="Maptz.Audio.WavFiles.SamplePlotter" Version="0.0.21" />
     <PackageReference Include="Maptz.Editing.TimeCodeDocuments.Converters.All" Version="0.0.12" />
@@ -24,6 +30,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
   </ItemGroup>
 
   <ItemGroup>

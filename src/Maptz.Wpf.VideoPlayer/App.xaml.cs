@@ -39,6 +39,9 @@ namespace Maptz.QuickVideoPlayer
 
         private void ConfigureServices(IServiceCollection services)
         {
+
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
             Unosquare.FFME.Library.FFmpegDirectory = Path.GetDirectoryName(FFMPEGPath);
 
             services.Configure<AppSettings>(this.Configuration.GetSection(nameof(AppSettings)));
@@ -55,7 +58,7 @@ namespace Maptz.QuickVideoPlayer
             });
             sc.Configure<SampleImageGeneratorSettings>(settings =>
             {
-                settings.ForegroundColorHex = "#000000FF";
+                settings.ForegroundColorHex = "#999999FF";
                 settings.BackgroundColorHex = "#FFFFFF00";
             });
             sc.AddWavSamplePlotter();

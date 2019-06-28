@@ -27,13 +27,13 @@
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Rectangle Grid.RowSpan="3" Fill="DarkGray"></Rectangle>
+                    <Rectangle Grid.RowSpan="3" Fill="#000"></Rectangle>
                     
 
                     <StackPanel Grid.Row="0"  Margin="20">
 
                         <StackPanel>
-                            
+                            <!--<local:VectorIcon Style="{StaticResource CopyIcon}" Foreground="Green"/>-->
                             <!--<iconPacks:PackIconMaterial Kind="EmoticonCool" />-->
                             <!--<iconPacks:PackIconMaterialLight Kind="Heart" />
                             <iconPacks:PackIconMaterialDesign Kind="DirectionsBike" />
@@ -62,7 +62,7 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
                         <ffme:MediaElement Grid.Row="0" x:Name="Media"
-                                   Background="Gray" LoadedBehavior="Play" UnloadedBehavior="Manual" />
+                                   Background="Black" LoadedBehavior="Play" UnloadedBehavior="Manual" />
 
                         <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="x_TextBlock_CurrentSubtitle" FontFamily="Consolas" Foreground="Red" FontSize="12" TextWrapping="WrapWithOverflow" ></TextBlock>
 
@@ -108,20 +108,22 @@
                     <StackPanel Orientation="Horizontal" Grid.Row="0"  HorizontalAlignment="Center" x:Name="x_StackPanel_TextCommands">
                     </StackPanel>
 
-                    <TextBox x:Name="x_TextBox" 
+                    <local:WrappedTextBox x:Name="x_TextBox" 
                              Grid.Row="1"
                              ScrollViewer.VerticalScrollBarVisibility="Visible"
-                             AcceptsReturn="True" AcceptsTab="False" Text="{Binding Project.ProjectData.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontFamily="Consolas" Background="Black" Foreground="Green" Padding="20">
-                        <TextBox.CaretBrush>
+                                          Text="{Binding Project.ProjectData.Text}" 
+                             >
+                        <!--
+                        Mode=TwoWay, UpdateSourceTrigger=PropertyChanged
+                        <RichTextBox.CaretBrush>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
                                     <GradientStop Color="Red" Offset="0" />
                                     <GradientStop Color="Red" Offset="1" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
-                        </TextBox.CaretBrush>
-
-                    </TextBox>
+                        </RichTextBox.CaretBrush>-->
+                    </local:WrappedTextBox>
                 </Grid>
             </Grid>
             <!--#endregion-->

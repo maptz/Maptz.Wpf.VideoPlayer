@@ -19,28 +19,15 @@ using Unosquare.FFME;
 namespace Maptz.QuickVideoPlayer.Commands
 {
 
+    
+
+
     public class PlaybackCommands : CommandProviderBase
     {
-        /* #region Private Methods */
-        private bool ValidatePosition(MediaElement me, TimeSpan newPosition)
-        {
-            if (me.NaturalDuration.HasValue)
-            {
-                return newPosition < me.NaturalDuration.Value;
-            }
-            return false;
-        }
-        /* #endregion Private Methods */
-        /* #region Public Properties */
-        public IAppCommand FrameBackwardCommand => new AppCommand("FrameBackwardVideo", (object o) => this.SkipFrames(-1), new KeyChords(new KeyChord(Key.OemComma, ctrl: true, shift: true)));
-        public IAppCommand FrameForwardCommand => new AppCommand("FrameForwardVideo", (object o) => this.SkipFrames(1), new KeyChords(new KeyChord(Key.OemPeriod, ctrl: true, shift: true)));
-        public IAppCommand PauseCommand => new AppCommand("PauseVideo", (object o) => this.Pause());
-        public IAppCommand PlayCommand => new AppCommand("PlayVideo", (object o) => this.Play());
-        public IAppCommand SeekToStartCommand => new AppCommand("SeekStartVideo", (object o) => this.Seek(0.0), new KeyChords(new KeyChord(Key.Home, ctrl: true, alt: true)));
-        public IAppCommand SeekToPreviousTimecodeCommand => new AppCommand(nameof(SeekToPreviousTimecodeCommand), (object o) => this.SeekToPreviousTimecode(), new KeyChords(new KeyChord(Key.Q, ctrl: true, shift: true)));
-
-
+        /* #region Private Fields */
         private const string SMPTEREGEXSTRING = "(?<Hours>\\d{2}):(?<Minutes>\\d{2}):(?<Seconds>\\d{2})(?::|;)(?<Frames>\\d{2})";
+        /* #endregion Private Fields */
+        /* #region Private Methods */
         private void SeekToPreviousTimecode()
         {
             var appState = this.ServiceProvider.GetRequiredService<AppState>();
@@ -56,13 +43,28 @@ namespace Maptz.QuickVideoPlayer.Commands
                 appState.VideoPlayerState.MediaElement.Seek(TimeSpan.FromMilliseconds(offsetMs));
             }
         }
-
+        private bool ValidatePosition(MediaElement me, TimeSpan newPosition)
+        {
+            if (me.NaturalDuration.HasValue)
+            {
+                return newPosition < me.NaturalDuration.Value;
+            }
+            return false;
+        }
+        /* #endregion Private Methods */
+        /* #region Public Properties */
+        public IAppCommand FrameBackwardCommand => new AppCommand("FrameBackwardVideo", (object o) => this.SkipFrames(-1), new KeyChords(new KeyChord(Key.OemComma, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.skip_previous));
+        public IAppCommand FrameForwardCommand => new AppCommand("FrameForwardVideo", (object o) => this.SkipFrames(1), new KeyChords(new KeyChord(Key.OemPeriod, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.skip_next));
+        public IAppCommand PauseCommand => new AppCommand("PauseVideo", (object o) => this.Pause(),  null,new XamlIconSource(IconPaths3.play_pause));
+        public IAppCommand PlayCommand => new AppCommand("PlayVideo", (object o) => this.Play(), null,  new XamlIconSource(IconPaths3.play_pause));
+        public IAppCommand SeekToPreviousTimecodeCommand => new AppCommand(nameof(SeekToPreviousTimecodeCommand), (object o) => this.SeekToPreviousTimecode(), new KeyChords(new KeyChord(Key.Q, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.play_pause));
+        public IAppCommand SeekToStartCommand => new AppCommand("SeekStartVideo", (object o) => this.Seek(0.0), new KeyChords(new KeyChord(Key.Home, ctrl: true, alt: true)), new XamlIconSource(IconPaths3.skip_backward));
         public IServiceProvider ServiceProvider { get; }
-        public IAppCommand SkipBackwardCommand => new AppCommand("SkipBackwardVideo", (object o) => this.Skip(-2.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: false)));
-        public IAppCommand SkipFastBackwardVideoCommand => new AppCommand("SkipFastBackwardVideo", (object o) => this.Skip(-5.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: true)));
-        public IAppCommand SkipFastForwardVideoCommand => new AppCommand("SkipFastForwardVideo", (object o) => this.Skip(-5.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: true)));
-        public IAppCommand SkipForwardCommand => new AppCommand("SkipForwardVideo", (object o) => this.Skip(2.0), new KeyChords(new KeyChord(Key.L, ctrl: true, shift: false)));
-        public IAppCommand TogglePlayStateCommand => new AppCommand("ToggleVideoPlayState", (object o) => this.TogglePlayState(), new KeyChords(new KeyChord(Key.Space, ctrl: true, shift: false)));
+        public IAppCommand SkipBackwardCommand => new AppCommand("SkipBackwardVideo", (object o) => this.Skip(-2.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.skip_previous));
+        public IAppCommand SkipFastBackwardVideoCommand => new AppCommand("SkipFastBackwardVideo", (object o) => this.Skip(-5.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.skip_backward));
+        public IAppCommand SkipFastForwardVideoCommand => new AppCommand("SkipFastForwardVideo", (object o) => this.Skip(-5.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.skip_forward));
+        public IAppCommand SkipForwardCommand => new AppCommand("SkipForwardVideo", (object o) => this.Skip(2.0), new KeyChords(new KeyChord(Key.L, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.skip_next));
+        public IAppCommand TogglePlayStateCommand => new AppCommand("ToggleVideoPlayState", (object o) => this.TogglePlayState(), new KeyChords(new KeyChord(Key.Space, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.play_pause));
         /* #endregion Public Properties */
         /* #region Public Constructors */
         public PlaybackCommands(IServiceProvider serviceProvider)
@@ -136,8 +138,5 @@ namespace Maptz.QuickVideoPlayer.Commands
 
         }
         /* #endregion Public Methods */
-        /* #region Interface: 'Maptz.QuickVideoPlayer.Commands.ICommandProvider' Methods */
-
-        /* #endregion Interface: 'Maptz.QuickVideoPlayer.Commands.ICommandProvider' Methods */
     }
 }

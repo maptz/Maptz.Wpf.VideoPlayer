@@ -112,7 +112,7 @@ namespace Maptz.QuickVideoPlayer
             Rect rect = new Rect(new System.Windows.Point(left, top), new System.Windows.Size(width, height));
             var pen = new Pen(Brushes.Red, 0.4);
             //var pen = (Pen)null;
-            dc.DrawRectangle(System.Windows.Media.Brushes.Aqua, pen, rect);
+            //dc.DrawRectangle(System.Windows.Media.Brushes.Aqua, pen, rect);
 
             base.OnRender(dc);
         }

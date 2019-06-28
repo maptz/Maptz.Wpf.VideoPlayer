@@ -120,8 +120,8 @@ namespace Maptz.QuickVideoPlayer.Commands
         }
         /* #endregion Public Constructors */
         /* #region Public Methods */
-        public IAppCommand NewProjectCommand => new AppCommand("NewProject", (object o) => this.NewProject(), new KeyChords(new KeyChord(Key.N, ctrl: true, shift: true)));
-        
+        public IAppCommand NewProjectCommand => new AppCommand("NewProject", (object o) => this.NewProject(), new KeyChords(new KeyChord(Key.N, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.video_plus));
+
         public void OpenProject(string projectFilePath = null)
         {
             var appState = this.ServiceProvider.GetRequiredService<AppState>();
@@ -156,17 +156,17 @@ namespace Maptz.QuickVideoPlayer.Commands
             appState.Project = project;
             appState.Project.ProjectData.CursorMs = 0;
         }
-        public IAppCommand OpenProjectCommand => new AppCommand("OpenProject", (object o) => this.OpenProject((string)o), new KeyChords(new KeyChord(Key.O, ctrl: true)));
-        public IAppCommand OpenVideoFileCommand => new AppCommand("OpenVideoFile", (object o) => this.OpenVideoFile((string)o), new KeyChords(new KeyChord(Key.O, ctrl: true, shift: true)));
-        public IAppCommand SaveProjectAsCommand => new AppCommand("SaveProjectAs", (object o) => this.SaveProject(true), new KeyChords(new KeyChord(Key.S, ctrl: true, shift: true)));
+        public IAppCommand OpenProjectCommand => new AppCommand("OpenProject", (object o) => this.OpenProject((string)o), new KeyChords(new KeyChord(Key.O, ctrl: true)),  new XamlIconSource(IconPaths3.file_video));
+        public IAppCommand OpenVideoFileCommand => new AppCommand("OpenVideoFile", (object o) => this.OpenVideoFile((string)o), new KeyChords(new KeyChord(Key.O, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.file_video));
+        public IAppCommand SaveProjectAsCommand => new AppCommand("SaveProjectAs", (object o) => this.SaveProject(true), new KeyChords(new KeyChord(Key.S, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.content_save_edit));
 
-        public IAppCommand SaveProjectCommand => new AppCommand("SaveProject", (object o) => this.SaveProject(), new KeyChords(new KeyChord(Key.S, ctrl: true, shift: false)));
+        public IAppCommand SaveProjectCommand => new AppCommand("SaveProject", (object o) => this.SaveProject(), new KeyChords(new KeyChord(Key.S, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.content_save));
 
-        public IAppCommand ShowProjectSettingsCommand => new AppCommand("ShowProjectSettings", (object o) => this.ShowProjectSettings(), new KeyChords(new KeyChord(Key.P, ctrl: true, shift: true)));
-        
+        public IAppCommand ShowProjectSettingsCommand => new AppCommand("ShowProjectSettings", (object o) => this.ShowProjectSettings(), new KeyChords(new KeyChord(Key.P, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.card_bulleted_settings));
+
         /* #endregion Public Methods */
         /* #region Interface: 'Maptz.QuickVideoPlayer.Commands.ICommandProvider' Methods */
-        
+
         /* #endregion Interface: 'Maptz.QuickVideoPlayer.Commands.ICommandProvider' Methods */
     }
 }

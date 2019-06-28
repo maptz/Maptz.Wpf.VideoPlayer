@@ -31,7 +31,7 @@ namespace Maptz.QuickVideoPlayer.Commands
 
         public IAppCommand ExitAppCommand
         {
-            get => new AppCommand("ExitApp", (object o) => this.ExitApp(), new KeyChords(new KeyChord(Key.F4, ctrl: false, alt: true)));
+            get => new AppCommand("ExitApp", (object o) => this.ExitApp(), new KeyChords(new KeyChord(Key.F4, ctrl: false, alt: true)), new XamlIconSource(IconPaths3.exit_run));
         }
 
         private void ExitApp()

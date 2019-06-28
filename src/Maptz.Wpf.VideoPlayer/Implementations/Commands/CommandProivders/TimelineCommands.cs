@@ -18,7 +18,19 @@ namespace Maptz.QuickVideoPlayer.Commands
 {
     public class TimelineCommands : CommandProviderBase
     {
-
+        /* #region Public Properties */
+        public IAppCommand CentreTimelineCommand =>new AppCommand("CentreTimeline", (object o) => this.Zoom(1.0), new KeyChords(new KeyChord(Key.OemPlus, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.image_filter_center_focus));
+        public IServiceProvider ServiceProvider { get; }
+        public IAppCommand ZoomInTimelineCommand => new AppCommand("ZoomInTimeline", (object o) => this.Zoom(0.5), new KeyChords(new KeyChord(Key.OemPlus, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.magnify_plus_outline));
+        public IAppCommand ZoomOutTimelineCommand => new AppCommand("ZoomOutTimeline", (object o) => this.Zoom(2.0), new KeyChords(new KeyChord(Key.OemMinus, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.magnify_minus_outline));
+        /* #endregion Public Properties */
+        /* #region Public Constructors */
+        public TimelineCommands(IServiceProvider serviceProvider)
+        {
+            this.ServiceProvider = serviceProvider;
+        }
+        /* #endregion Public Constructors */
+        /* #region Public Methods */
         public void Zoom(double factor)
         {
             var appState = this.ServiceProvider.GetRequiredService<AppState>();
@@ -46,18 +58,6 @@ namespace Maptz.QuickVideoPlayer.Commands
             appState.Project.ProjectData.ViewMs.StartMs = newStartMs;
             appState.Project.ProjectData.ViewMs.EndMs = newEndMs;
         }
-
-        public TimelineCommands(IServiceProvider serviceProvider)
-        {
-            this.ServiceProvider = serviceProvider;
-        }
-
-        public IServiceProvider ServiceProvider { get; }
-
-        
-        public IAppCommand CentreTimelineCommand =>new AppCommand("CentreTimeline", (object o) => this.Zoom(1.0), new KeyChords(new KeyChord(Key.OemPlus, ctrl: true, shift: false)));
-        public IAppCommand ZoomOutTimelineCommand => new AppCommand("ZoomOutTimeline", (object o) => this.Zoom(2.0), new KeyChords(new KeyChord(Key.OemMinus, ctrl: true, shift: true)));
-        public IAppCommand ZoomInTimelineCommand => new AppCommand("ZoomInTimeline", (object o) => this.Zoom(0.5), new KeyChords(new KeyChord(Key.OemPlus, ctrl: true, shift: true)));
-
+        /* #endregion Public Methods */
     }
 }

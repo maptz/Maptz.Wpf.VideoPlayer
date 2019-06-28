@@ -4,12 +4,12 @@
              xmlns:local="clr-namespace:Maptz.QuickVideoPlayer">
     <Application.Resources>
 
-        <local:BoolVisibilityConverter x:Key="BoolVisibilityConverter"></local:BoolVisibilityConverter>
-        <local:MsToTimeCodeConverter x:Key="MsToTimeCodeConverter"></local:MsToTimeCodeConverter>
-        <local:MsToTimeSpanConverter x:Key="MsToTimeSpanConverter"></local:MsToTimeSpanConverter>
-        <local:ViewMsToViewportConverter x:Key="ViewMsToViewportConverter"></local:ViewMsToViewportConverter>
-        <local:TimeCodeToStringConverter x:Key="TimeCodeToStringConverter" />
-        <local:StringToUriConverter x:Key="StringToUriConverter" />
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="Styles.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+       
 
     </Application.Resources>
 </Application>

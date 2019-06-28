@@ -8,7 +8,7 @@ namespace Maptz.QuickVideoPlayer
     {
 
         
-        public TextBox TextBox { get; set; }
+        public WrappedTextBox TextBox { get; set; }
 
         private VideoPlayerState _videoPlayerState;
         public VideoPlayerState VideoPlayerState

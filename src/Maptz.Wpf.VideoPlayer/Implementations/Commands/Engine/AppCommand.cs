@@ -17,14 +17,16 @@ namespace Maptz.QuickVideoPlayer.Commands
     public class AppCommand : IAppCommand
     {
         public KeyChords Shortcut { get; set; }
+        public IIconSource IconSource { get; }
         public string Name { get; }
         public Action<object> ExecuteAction { get; }
 
-        public AppCommand(string name, Action<object> executeAction, KeyChords shortcut = null)
+        public AppCommand(string name, Action<object> executeAction, KeyChords shortcut = null, IIconSource iconSource = null)
         {
             this.Name = name;
             this.ExecuteAction = executeAction;
             this.Shortcut = shortcut;
+            this.IconSource = iconSource;
         }
 
         public event EventHandler CanExecuteChanged;

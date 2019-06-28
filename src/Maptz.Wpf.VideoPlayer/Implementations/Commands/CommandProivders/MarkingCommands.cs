@@ -13,31 +13,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using Unosquare.FFME;
 namespace Maptz.QuickVideoPlayer.Commands
 {
 
+
     public class MarkingCommands : CommandProviderBase
     {
-        public MarkingCommands(IServiceProvider serviceProvider)
-        {
-            this.ServiceProvider = serviceProvider;
-        }
-
-        public IServiceProvider ServiceProvider { get; }
-
-
-        public IAppCommand ClearMarkInMsCommand => new AppCommand("ClearMarkInMs", (object o) => this.ClearMarkInMs(), new KeyChords(new KeyChord(Key.D, ctrl: true)));
-        public IAppCommand SetMarkInCommand => new AppCommand("SetMarkInMs", (object o) => this.SetMarkInMs(), new KeyChords(new KeyChord(Key.I, ctrl: true)));
-
-
+        /* #region Private Methods */
         private void ClearMarkInMs()
         {
             var appState = this.ServiceProvider.GetRequiredService<AppState>();
             appState.Project.ProjectData.MarkInMs = null;
         }
-
-
         private void SetMarkInMs(long? ms = null)
         {
             var appState = this.ServiceProvider.GetRequiredService<AppState>();
@@ -51,5 +40,17 @@ namespace Maptz.QuickVideoPlayer.Commands
                 appState.Project.ProjectData.MarkInMs = ms.Value;
             }
         }
+        /* #endregion Private Methods */
+        /* #region Public Properties */
+        public IAppCommand ClearMarkInMsCommand => new AppCommand("ClearMarkInMs", (object o) => this.ClearMarkInMs(), new KeyChords(new KeyChord(Key.D, ctrl: true)), new XamlIconSource(IconPaths3.flag_remove));
+        public IServiceProvider ServiceProvider { get; }
+        public IAppCommand SetMarkInCommand => new AppCommand("SetMarkInMs", (object o) => this.SetMarkInMs(), new KeyChords(new KeyChord(Key.I, ctrl: true)), new XamlIconSource(IconPaths3.flag_plus));
+        /* #endregion Public Properties */
+        /* #region Public Constructors */
+        public MarkingCommands(IServiceProvider serviceProvider)
+        {
+            this.ServiceProvider = serviceProvider;
+        }
+        /* #endregion Public Constructors */
     }
 }

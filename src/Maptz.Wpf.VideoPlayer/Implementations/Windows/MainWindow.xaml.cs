@@ -123,11 +123,13 @@ namespace Maptz.QuickVideoPlayer
                 var bw = new BindingWatcher<string>(appState, "Project.ProjectData.Text");
                 bw.BindingChanged += (s, e) =>
                 {
+                    OnProjectTextChanged(e.OldValue, e.NewValue);
                     InvalidateSubtitles();
                 };
                 InvalidateSubtitles();
                 this._bindingWatchers.Add(bw);
             }
+            
             {
                 var bw = new BindingWatcher<string>(appState, "Project.ProjectSettings.VideoFilePath");
                 bw.BindingChanged += (s, e) =>
@@ -164,7 +166,7 @@ namespace Maptz.QuickVideoPlayer
             }
             {
                 var bw = new BindingWatcher<long?>(appState, "Project.IsDirty");
-                
+
                 bw.BindingChanged += (s, e) =>
                 {
                     this.SetTitle();
@@ -196,7 +198,16 @@ namespace Maptz.QuickVideoPlayer
             this.x_CursorControl.MouseWheel += this.X_CursorControl_MouseWheel;
             /* #endregion*/
 
+
             this.InvalidateCommandMenus();
+        }
+
+      
+
+        
+        private void OnProjectTextChanged(object oldValue, object newValue)
+        {
+            
         }
 
         private void SetTitle()
@@ -222,6 +233,10 @@ namespace Maptz.QuickVideoPlayer
             this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(timelineCommands.CentreTimelineCommand));
             this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(timelineCommands.ZoomInTimelineCommand));
             this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(timelineCommands.ZoomOutTimelineCommand));
+            this.x_StackPanel_TimelineCommands.Children.Add(new Canvas { Width = 100, Height = 1 });
+            var markingCommands = this.ServiceProvider.GetRequiredService<MarkingCommands>();
+            this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(markingCommands.ClearMarkInMsCommand));
+            this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(markingCommands.SetMarkInCommand));
 
             //
             var textManipCommands = this.ServiceProvider.GetRequiredService<TextManipulationCommands>();
@@ -280,12 +295,19 @@ namespace Maptz.QuickVideoPlayer
             var menu = this.x_Menu;
             var fm = new MenuItem() { Header = "_File" };
             menu.Items.Add(fm);
-            fm.Items.Add(new MenuItem() { Header = "_New Project", Command = projectCommands.NewProjectCommand });
-            fm.Items.Add(new MenuItem() { Header = "_Open Project", Command = projectCommands.OpenProjectCommand });
-            fm.Items.Add(new MenuItem() { Header = "_Save Project", Command = projectCommands.SaveProjectCommand });
-            fm.Items.Add(new MenuItem() { Header = "Save Project As", Command = projectCommands.SaveProjectAsCommand });
-            fm.Items.Add(new MenuItem() { Header = "Project Settings", Command = projectCommands.ShowProjectSettingsCommand });
-            fm.Items.Add(new MenuItem() { Header = "_Exit", Command = appCommands.ExitAppCommand });
+
+            var comm = projectCommands.NewProjectCommand; ;
+            fm.Items.Add(new MenuItem() { Header = "_New Project", Command = comm, Icon = comm.IconSource?.GetIconElement() });
+            comm = projectCommands.OpenProjectCommand;
+            fm.Items.Add(new MenuItem() { Header = "_Open Project", Command = comm, Icon = comm.IconSource?.GetIconElement() });
+            comm = projectCommands.SaveProjectCommand;
+            fm.Items.Add(new MenuItem() { Header = "_Save Project", Command = comm, Icon = comm.IconSource?.GetIconElement() });
+            comm = projectCommands.SaveProjectAsCommand;
+            fm.Items.Add(new MenuItem() { Header = "Save Project As", Command = comm, Icon = comm.IconSource?.GetIconElement() });
+            comm = projectCommands.ShowProjectSettingsCommand;
+            fm.Items.Add(new MenuItem() { Header = "Project Settings", Command = comm, Icon = comm.IconSource?.GetIconElement() });
+            comm = appCommands.ExitAppCommand;
+            fm.Items.Add(new MenuItem() { Header = "_Exit", Command = comm, Icon = comm.IconSource?.GetIconElement() });
         }
     }
 
