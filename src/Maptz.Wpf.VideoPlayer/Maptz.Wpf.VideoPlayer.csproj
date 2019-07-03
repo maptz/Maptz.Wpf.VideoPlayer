@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Remove="Implementations\Controls\VectorIcon.xaml" />
     <None Remove="Implementations\Controls\WrappedTextBox.xaml" />
+    <None Remove="soundtouch_dll-2.1.0.zip" />
     <None Remove="Styles.xaml" />
   </ItemGroup>
 

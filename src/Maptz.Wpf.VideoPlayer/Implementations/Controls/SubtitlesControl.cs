@@ -86,7 +86,10 @@ namespace Maptz.QuickVideoPlayer
                 var heightProp = 0.1;
                 var pen = new Pen(Brushes.Purple, 1.0);
                 pen = null;
-                drawingContext.DrawRectangle(new SolidColorBrush(Color.FromArgb(60, 0, 255, 0)), pen, new Rect(subStartX, this.ActualHeight*((1.0-heightProp) / 2.0), subEndX - subStartX, this.ActualHeight*heightProp));
+                //var top = this.ActualHeight * ((1.0 - heightProp) / 2.0);
+                var top = this.ActualHeight * ((1.0 - heightProp));
+                var heig = this.ActualHeight * heightProp;
+                drawingContext.DrawRectangle(new SolidColorBrush(Color.FromArgb(60, 0, 255, 0)), pen, new Rect(subStartX, top, subEndX - subStartX, heig));
             }
 
 

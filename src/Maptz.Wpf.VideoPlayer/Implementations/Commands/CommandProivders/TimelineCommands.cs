@@ -31,29 +31,53 @@ namespace Maptz.QuickVideoPlayer.Commands
         }
         /* #endregion Public Constructors */
         /* #region Public Methods */
-        public void Zoom(double factor)
+        public void Zoom(double factor, double? centerMs = null)
         {
             var appState = this.ServiceProvider.GetRequiredService<AppState>();
             var ems = (double)appState.Project.ProjectData.ViewMs.EndMs;
             var sms = (double)appState.Project.ProjectData.ViewMs.StartMs;
+            var maxSms = (double)appState.Project.ProjectData.ViewMs.MaxStartMs;
+            var maxEms = (double) appState.Project.ProjectData.ViewMs.MaxEndMs;
             var wid = (ems - sms);
             var halfWid = wid / 2.0;
             double cms = sms + wid / 2.0;
-            bool centerCursor = true;
-            if (centerCursor && appState.Project.ProjectData.CursorMs.HasValue)
+            if (centerMs.HasValue)
+            {
+                cms = centerMs.Value;
+            }
+            else if (appState.Project.ProjectData.CursorMs.HasValue)
             {
                 cms = appState.Project.ProjectData.CursorMs.Value;
             }
 
             var newStartMs = (long)(cms - halfWid * factor);
             var newEndMs = (long)(cms + halfWid * factor); ;
-            var delta = 0L;
-            if (newStartMs < 0)
+            var newRangeMs = newEndMs - newStartMs;
+            var maxRangeMs = maxEms - maxSms;
+            if (newRangeMs >= maxRangeMs)
             {
-                delta = 0 - newStartMs;
-                newStartMs = 0;
-                newEndMs += delta;
+                newStartMs = (long)maxSms;
+                newEndMs = (long)maxEms;
             }
+            else
+            {
+                //We know our range is less than. 
+                var delta = 0L;
+                if (newStartMs < maxSms)
+                {
+                    delta = (long) maxSms - newStartMs;
+                    newStartMs = (long)maxSms;
+                    newEndMs += delta;
+                }
+                if (newEndMs > maxEms)
+                {
+                    delta = (long) maxEms - newEndMs;
+                    newStartMs += delta;
+                    newEndMs += delta;
+                }
+            }
+
+
 
             appState.Project.ProjectData.ViewMs.StartMs = newStartMs;
             appState.Project.ProjectData.ViewMs.EndMs = newEndMs;

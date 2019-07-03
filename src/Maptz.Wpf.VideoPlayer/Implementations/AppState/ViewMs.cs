@@ -8,11 +8,42 @@ namespace Maptz.QuickVideoPlayer
     {
         long StartMs { get; set; }
         long EndMs { get; set; }
+        long MaxStartMs { get; set; }
+        long MaxEndMs { get; set; }
     }
 
     public class ViewMs : IViewMs, INotifyPropertyChanged
     {
 
+
+        private long _maxEndMs;
+        public long MaxEndMs
+        {
+            get => this._maxEndMs;
+            set
+            {
+                var oldValue = this._maxEndMs;
+                if (this._maxEndMs != value)
+                {
+                    this._maxEndMs = value;
+                    this.OnPropertyChanged(nameof(MaxEndMs), oldValue, value);
+                }
+            }
+        }
+        private long _maxStartMs;
+        public long MaxStartMs
+        {
+            get => this._maxStartMs;
+            set
+            {
+                var oldValue = this._maxStartMs;
+                if (this._maxStartMs != value)
+                {
+                    this._maxStartMs = value;
+                    this.OnPropertyChanged(nameof(MaxStartMs), oldValue, value);
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged<T>(string propertyName, T oldValue, T newValue)
