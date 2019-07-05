@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <CodeAnalysisRuleSet>..\..\Analyzers.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ffmpeg-4.1.1-win64-shared\**" />
+    <EmbeddedResource Remove="ffmpeg-4.1.1-win64-shared\**" />
+    <None Remove="ffmpeg-4.1.1-win64-shared\**" />
+    <Page Remove="ffmpeg-4.1.1-win64-shared\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="soundtouch_dll-2.1.0.zip" />
+    <None Remove="Styles.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FFME.Windows" Version="4.1.310" />
+    <PackageReference Include="Maptz.Audio.WavFiles.SamplePlotter" Version="0.0.21" />
+    <PackageReference Include="Maptz.Editing.TimeCodeDocuments.Converters.All" Version="0.0.12" />
+    <PackageReference Include="Maptz.Tiles.Base" Version="0.0.7" />
+    <PackageReference Include="Maptz.TimeCode.Base" Version="0.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Concepts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Maptz.Subtitler.Engine\Maptz.Subtitler.Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\external-dependencies\external\ffmpeg-4.1.3-win64-shared\ffmpeg-4.1.3-win64-shared\bin\*.*" Visible="false">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    
+    <Content Include="..\external-dependencies\external\soundtouch_dll-2.1.1-resolved\*.*" Visible="false">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
