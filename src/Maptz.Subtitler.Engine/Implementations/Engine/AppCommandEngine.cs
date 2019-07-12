@@ -1,3 +1,4 @@
+using Maptz.Subtitler.Engine.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,6 +22,16 @@ namespace Maptz.QuickVideoPlayer.Commands
             {
                 this.AppCommands.Add(command);
             }
+            var pluginEngine = this.ServiceProvider.GetRequiredService<IPluginEngine>();
+            var pluginInstances = pluginEngine.LoadPlugins();
+            foreach(var instance in pluginInstances)
+            {
+                foreach(var command in instance.Commands)
+                {
+                    this.AppCommands.Add(command);
+                }
+            }
+
         }
         /* #endregion Private Methods */
         /* #region Public Properties */
@@ -59,7 +70,7 @@ namespace Maptz.QuickVideoPlayer.Commands
         public void RegisterKeyEvent(KeyEventArgs ev)
         {
 
-            Debug.WriteLine("Command engine captured key " + ev.Key);
+            
             var isShiftDown = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
             var isAltDown = Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
             var isCtrlDown = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);

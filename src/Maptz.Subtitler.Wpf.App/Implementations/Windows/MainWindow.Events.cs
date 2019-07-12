@@ -28,7 +28,7 @@ namespace Maptz.QuickVideoPlayer
                 return;
             if (string.IsNullOrWhiteSpace(e.Message) == false && e.Message.ContainsOrdinal("Using non-standard frame rate"))
                 return;
-        //Debug.WriteLine(e);
+        
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Maptz.QuickVideoPlayer
         {
             if (e.MessageType == MediaLogMessageType.Trace)
                 return;
-        //Debug.WriteLine(e);
+        
         }
     /* #endregion Private Methods */
     }

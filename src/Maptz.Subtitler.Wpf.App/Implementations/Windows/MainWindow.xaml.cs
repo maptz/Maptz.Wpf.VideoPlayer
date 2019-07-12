@@ -3,10 +3,13 @@ using Maptz.QuickVideoPlayer.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -29,27 +32,27 @@ namespace Maptz.QuickVideoPlayer
             var projectCommands = this.ServiceProvider.GetRequiredService<ProjectCommands>();
             var menu = this.x_Menu;
             var fm = new MenuItem()
-            {Header = "_File"};
+            { Header = "_File" };
             menu.Items.Add(fm);
             var comm = projectCommands.NewProjectCommand;
             ;
             fm.Items.Add(new MenuItem()
-            {Header = "_New Project", Command = comm, Icon = comm.IconSource?.GetIconElement()});
+            { Header = "_New Project", Command = comm, Icon = comm.IconSource?.GetIconElement() });
             comm = projectCommands.OpenProjectCommand;
             fm.Items.Add(new MenuItem()
-            {Header = "_Open Project", Command = comm, Icon = comm.IconSource?.GetIconElement()});
+            { Header = "_Open Project", Command = comm, Icon = comm.IconSource?.GetIconElement() });
             comm = projectCommands.SaveProjectCommand;
             fm.Items.Add(new MenuItem()
-            {Header = "_Save Project", Command = comm, Icon = comm.IconSource?.GetIconElement()});
+            { Header = "_Save Project", Command = comm, Icon = comm.IconSource?.GetIconElement() });
             comm = projectCommands.SaveProjectAsCommand;
             fm.Items.Add(new MenuItem()
-            {Header = "Save Project As", Command = comm, Icon = comm.IconSource?.GetIconElement()});
+            { Header = "Save Project As", Command = comm, Icon = comm.IconSource?.GetIconElement() });
             comm = projectCommands.ShowProjectSettingsCommand;
             fm.Items.Add(new MenuItem()
-            {Header = "Project Settings", Command = comm, Icon = comm.IconSource?.GetIconElement()});
+            { Header = "Project Settings", Command = comm, Icon = comm.IconSource?.GetIconElement() });
             comm = appCommands.ExitAppCommand;
             fm.Items.Add(new MenuItem()
-            {Header = "_Exit", Command = comm, Icon = comm.IconSource?.GetIconElement()});
+            { Header = "_Exit", Command = comm, Icon = comm.IconSource?.GetIconElement() });
         }
 
         private void InvalidateCommandMenus()
@@ -65,7 +68,7 @@ namespace Maptz.QuickVideoPlayer
             this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(timelineCommands.CentreTimelineCommand));
             this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(timelineCommands.ZoomInTimelineCommand));
             this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(timelineCommands.ZoomOutTimelineCommand));
-            this.x_StackPanel_TimelineCommands.Children.Add(new Canvas{Width = 100, Height = 1});
+            this.x_StackPanel_TimelineCommands.Children.Add(new Canvas { Width = 100, Height = 1 });
             var markingCommands = this.ServiceProvider.GetRequiredService<MarkingCommands>();
             this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(markingCommands.ClearMarkInMsCommand));
             this.x_StackPanel_TimelineCommands.Children.Add(AppCommandButton.FromAppCommand(markingCommands.SetMarkInCommand));
@@ -98,13 +101,58 @@ namespace Maptz.QuickVideoPlayer
             this.x_StackPanel_TextCommands.Children.Add(AppCommandButton.FromAppCommand(textManipCommands.SplitSentencesCommand));
         }
 
-        private void InvalidateSubtitles()
+        protected override void OnClosing(CancelEventArgs e)
         {
-            var appState = this.ServiceProvider.GetRequiredService<AppState>();
-            var doc = this.SubtitleProvider.GetSubtitles(appState.Project.ProjectData.Text);
-            this.SubtitleItems = doc.Items;
-            this.x_SubtitlesControl.SubtitleItems = doc.Items;
-            this.UpdateTimeCode();
+            this._subtitleCheckTaskCancellationTokenSource.Cancel();
+            base.OnClosing(e);
+        }
+
+        private Task SubtitleCheckTask = null;
+        private DateTimeOffset? _lastSubtitleUpdateRequest = null;
+        private DateTimeOffset? _lastSubtitleUpdate = null;
+        private CancellationTokenSource _subtitleCheckTaskCancellationTokenSource = new CancellationTokenSource();
+
+        private void RequestSubtitleUpdate()
+        {
+            if (this.SubtitleCheckTask == null)
+            {
+                this.SubtitleCheckTask = Task.Run(async () =>
+                {
+                    do
+                    {
+                        var now = DateTimeOffset.Now;
+                        var timeSinceLastUpdate = now - this._lastSubtitleUpdate;
+                        const double MinUpdateWaitSeconds = 0.2;
+                        //We will update if, there has been an updated requested, and if that was at least MinUpdateWaitSeconds since the last update.
+
+                        //If the minimum time has elapsed and there hasn't been an update since the 
+                        if (_lastSubtitleUpdate == null || timeSinceLastUpdate?.TotalSeconds > MinUpdateWaitSeconds)
+                        {
+                            //Check if there has been an update since the last update request
+                            if (_lastSubtitleUpdateRequest.HasValue)
+                            {
+                                this._lastSubtitleUpdateRequest = null;
+                                var appState = this.ServiceProvider.GetRequiredService<AppState>();
+                                var doc = await this.SubtitleProvider.GetSubtitlesAsync(appState.Project.ProjectData.Text);
+                                await Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    this.SubtitleItems = doc.Items;
+
+                                    
+                                }), null);
+
+                            }
+                            this._lastSubtitleUpdate = DateTimeOffset.Now;
+                        }
+                        await Task.Delay(40);
+                    }
+                    while (!_subtitleCheckTaskCancellationTokenSource.Token.IsCancellationRequested);
+
+                });
+            }
+            //Request a new update;
+            this._lastSubtitleUpdateRequest = DateTimeOffset.Now;
+            this.SyncVideoCursor();
         }
 
         private void Media_MediaOpened(object sender, MediaOpenedEventArgs e)
@@ -143,11 +191,12 @@ namespace Maptz.QuickVideoPlayer
             this.Title = title;
         }
 
-        private void UpdateTimeCode()
+        private void SyncVideoCursor()
         {
             var appState = this.ServiceProvider.GetRequiredService<AppState>();
             var currentTCStr = "UNKNOWN";
             var currentSubStr = string.Empty;
+            ITimeCodeDocumentItem<string> currentSub = null;
             if (appState.Project.ProjectData.CursorMs.HasValue)
             {
                 var fr = appState.Project.ProjectSettings.FrameRate;
@@ -156,12 +205,18 @@ namespace Maptz.QuickVideoPlayer
                 currentTCStr = cursorTC.ToString();
                 if (this.SubtitleItems != null && this.SubtitleItems.Any())
                 {
-                    var currentSub = this.SubtitleItems.FirstOrDefault(p => cursorTC.TotalFrames >= p.RecordIn.TotalFrames && cursorTC.TotalFrames <= p.RecordOut.TotalFrames);
-                    if (currentSub != null)
-                    {
-                        currentSubStr = currentSub.Content;
-                    }
+                    currentSub = this.SubtitleItems.FirstOrDefault(p => cursorTC.TotalFrames >= p.RecordIn.TotalFrames && cursorTC.TotalFrames <= p.RecordOut.TotalFrames);
                 }
+            }
+
+            if (currentSub != null)
+            {
+                currentSubStr = currentSub.Content;
+                this.x_TextBox.StartHighlight(currentSub.TextSpan, WrappedTextBox.HighlightKind.VideoCursor, true);
+            }
+            else
+            {
+                this.x_TextBox.ClearHighlights(p=>p.Kind == WrappedTextBox.HighlightKind.VideoCursor);
             }
 
             this.x_TextBlock_TimeCode.Text = currentTCStr;
@@ -182,7 +237,7 @@ namespace Maptz.QuickVideoPlayer
             var widthMs = this.x_CursorControl.EndMs - (double)this.x_CursorControl.StartMs;
             var newStartMs = this.x_CursorControl.StartMs + widthMs * pos.X / this.x_CursorControl.ActualWidth;
             var tc = TimeCode.FromSeconds(newStartMs / 1000.0, SmpteFrameRate.Smpte25);
-            Debug.WriteLine("Seeking to: " + tc);
+
             if (Keyboard.IsKeyDown(Key.LeftAlt))
             {
                 var appState = this.ServiceProvider.GetRequiredService<AppState>();
@@ -193,7 +248,7 @@ namespace Maptz.QuickVideoPlayer
                 this.Media.Seek(TimeSpan.FromMilliseconds(newStartMs));
                 if (Media.IsPaused)
                 {
-                //Media.Play();
+                    //Media.Play();
                 }
             }
 
@@ -220,10 +275,26 @@ namespace Maptz.QuickVideoPlayer
             get;
         }
 
+        private IEnumerable<ITimeCodeDocumentItem<string>> _subtitleItems;
         public IEnumerable<ITimeCodeDocumentItem<string>> SubtitleItems
         {
-            get;
-            private set;
+            get => this._subtitleItems;
+            private set
+            {
+                var oldValue = this._subtitleItems;
+                if (oldValue != value)
+                {
+                    this._subtitleItems = value;
+                    this.OnSubtitleItemsChanged(oldValue, value);
+                }
+            }
+        }
+
+        private void OnSubtitleItemsChanged(IEnumerable<ITimeCodeDocumentItem<string>> oldValue, IEnumerable<ITimeCodeDocumentItem<string>> newValue)
+        {
+            this.x_SubtitlesControl.SubtitleItems = newValue;
+            this.SyncVideoCursor();
+            this.SyncCaretPosition();
         }
 
         public ISubtitleProvider SubtitleProvider
@@ -248,14 +319,14 @@ namespace Maptz.QuickVideoPlayer
             this._bindingWatchers = new List<BindingWatcherBase>();
             {
                 var bw = new BindingWatcher<string>(appState, "Project.ProjectData.Text");
-                bw.BindingChanged += (s, e) =>
+                bw.BindingChanged += async (s, e) =>
                 {
                     OnProjectTextChanged(e.OldValue, e.NewValue);
-                    InvalidateSubtitles();
+                    RequestSubtitleUpdate();
                 }
 
                 ;
-                InvalidateSubtitles();
+                RequestSubtitleUpdate();
                 this._bindingWatchers.Add(bw);
             }
 
@@ -275,7 +346,7 @@ namespace Maptz.QuickVideoPlayer
                 var bw = new BindingWatcher<SmpteFrameRate>(appState, "Project.ProjectSettings.FrameRate");
                 bw.BindingChanged += (s, e) =>
                 {
-                    this.UpdateTimeCode();
+                    this.SyncVideoCursor();
                 }
 
                 ;
@@ -286,22 +357,18 @@ namespace Maptz.QuickVideoPlayer
                 var bw = new BindingWatcher<long>(appState, "Project.ProjectSettings.OffsetFrames");
                 bw.BindingChanged += (s, e) =>
                 {
-                    this.UpdateTimeCode();
-                }
-
-                ;
+                    this.SyncVideoCursor();
+                };
                 this._bindingWatchers.Add(bw);
             }
 
             {
-                var bw = new BindingWatcher<long? >(appState, "Project.ProjectData.CursorMs");
+                var bw = new BindingWatcher<long?>(appState, "Project.ProjectData.CursorMs");
                 bw.BindingChanged += (s, e) =>
                 {
-                    this.UpdateTimeCode();
-                }
-
-                ;
-                this.UpdateTimeCode();
+                    this.SyncVideoCursor();
+                };
+                this.SyncVideoCursor();
                 this._bindingWatchers.Add(bw);
             }
 
@@ -313,12 +380,12 @@ namespace Maptz.QuickVideoPlayer
                 }
 
                 ;
-                this.Media.SpeedRatio = appState.VideoPlayerState != null ?  appState.VideoPlayerState.SpeedRatio : 1.0;
+                this.Media.SpeedRatio = appState.VideoPlayerState != null ? appState.VideoPlayerState.SpeedRatio : 1.0;
                 this._bindingWatchers.Add(bw);
             }
 
             {
-                var bw = new BindingWatcher<long? >(appState, "Project.IsDirty");
+                var bw = new BindingWatcher<long?>(appState, "Project.IsDirty");
                 bw.BindingChanged += (s, e) =>
                 {
                     this.SetTitle();
@@ -330,6 +397,8 @@ namespace Maptz.QuickVideoPlayer
 
                 BindMediaRenderingEvents();
             }
+
+
 
             //this.Media.Source = new Uri(ViewModel.FilePath);
             // Global FFmpeg message handlerx_StackPanel_TimelineCommands
@@ -355,6 +424,48 @@ namespace Maptz.QuickVideoPlayer
             this.x_CursorControl.MouseWheel += this.X_CursorControl_MouseWheel;
             /* #endregion*/
             this.InvalidateCommandMenus();
+
+            //Wire up the hover mechanism
+            this.x_SubtitlesControl.HoverStart += (s, e) =>
+            {
+                this.x_TextBox.StartHighlight(e.Item.TextSpan, WrappedTextBox.HighlightKind.Hover);
+            };
+            this.x_SubtitlesControl.HoverEnd += (s, e) =>
+            {
+                this.x_TextBox.EndHighlight(e.Item.TextSpan, WrappedTextBox.HighlightKind.Hover);
+            };
+            //Sync the caret positions
+            this.x_TextBox.TextEditor.TextArea.Caret.PositionChanged += (s, e) =>
+            {
+                SyncCaretPosition();
+            };
+            SyncCaretPosition();
+
+            this.x_SubtitlesControl.Click += (s, e) =>
+            {
+                if (!e.Index.HasValue) return;
+
+                //this.x_TextBox.CaretIndex = e.Index;
+                this.x_TextBox.TextEditor.CaretOffset = e.Index.Value;
+                var focused = this.x_TextBox.TextEditor.Focus();
+                var elem = FocusManager.GetFocusScope(this.x_TextBox.TextEditor);
+                FocusManager.SetFocusedElement(elem, this.x_TextBox.TextEditor);
+            };
+
+        }
+
+       
+
+        private void SyncCaretPosition()
+        {
+            var absoluteCaretOffset = this.x_TextBox.TextEditor.CaretOffset;
+            this.x_SubtitlesControl.CursorIndex = absoluteCaretOffset;
+
+            var firstItem = this.SubtitleItems?.FirstOrDefault(item => item.TextSpan.Start <= absoluteCaretOffset && (item.TextSpan.Start + item.TextSpan.Length) >= absoluteCaretOffset);
+            if (firstItem != null)
+            {
+                this.x_TextBox.StartHighlight(firstItem.TextSpan, WrappedTextBox.HighlightKind.Caret, true);
+            }
         }
 
         private void BindMediaRenderingEvents()
@@ -522,7 +633,7 @@ namespace Maptz.QuickVideoPlayer
             {
                 //Handles cursor downs on the timeline.
                 var pos = e.GetPosition(this.x_CursorControl);
-                var widthMs =this.x_CursorControl.EndMs - (double)this.x_CursorControl.StartMs;
+                var widthMs = this.x_CursorControl.EndMs - (double)this.x_CursorControl.StartMs;
                 var newStartMs = this.x_CursorControl.StartMs + widthMs * pos.X / this.x_CursorControl.ActualWidth;
                 if (newStartMs < 0)
                     newStartMs = 0;

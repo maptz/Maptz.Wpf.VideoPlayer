@@ -44,16 +44,19 @@
                         <ffme:MediaElement Grid.Row="0" x:Name="Media"
                                    Background="Black" LoadedBehavior="Play" UnloadedBehavior="Manual" />
 
-                        <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="x_TextBlock_CurrentSubtitle" FontFamily="Consolas" Foreground="Red" FontSize="12" TextWrapping="WrapWithOverflow" ></TextBlock>
+                        <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="x_TextBlock_CurrentSubtitle" FontFamily="Consolas" Foreground="Red" FontSize="12" TextWrapping="WrapWithOverflow" 
+                                   Visibility="Collapsed"
+                                   ></TextBlock>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="x_StackPanel_PlaybackCommands">
                             <TextBlock Text="{Binding SpeedRatio, ElementName=Media}" Foreground="Red"></TextBlock>
                         </StackPanel>
                     </Grid>
 
-                    <Grid x:Name="x_Timeline" Grid.Row="2" Height="200"  Margin="20">
+                    <Grid x:Name="x_Timeline" Grid.Row="2" Height="600"  Margin="20">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="90"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center" x:Name="x_StackPanel_TimelineCommands">
@@ -63,28 +66,44 @@
                             <local:WavSampleControl x:Name="x_WavSampleControl" HorizontalAlignment="Stretch" FilePath="{Binding Project.ProjectSettings.VideoFilePath}"
                                             StartMs="{Binding Project.ProjectData.ViewMs.StartMs}" EndMs="{Binding Project.ProjectData.ViewMs.EndMs}"
                                             ></local:WavSampleControl>
+                            
+                            <local:CursorControl x:Name="x_CursorControl_MarkIn"  HorizontalAlignment="Stretch"
+                                         StartMs="{Binding Project.ProjectData.ViewMs.StartMs}" EndMs="{Binding Project.ProjectData.ViewMs.EndMs}"
+                                         CursorMs="{Binding Project.ProjectData.MarkInMs}"
+                                         Foreground="Gray"
+                                         ></local:CursorControl>
+                            <local:CursorControl x:Name="x_CursorControl"  HorizontalAlignment="Stretch"
+                                         StartMs="{Binding Project.ProjectData.ViewMs.StartMs}" EndMs="{Binding Project.ProjectData.ViewMs.EndMs}"
+                                         CursorMs="{Binding Project.ProjectData.CursorMs}"
+                                         Foreground="Blue"
+                                         ></local:CursorControl>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                          
+
+                            <local:CursorControl x:Name="x_CursorControl_MarkIn2"  HorizontalAlignment="Stretch"
+                                                 Opacity="0.5"
+                                         StartMs="{Binding Project.ProjectData.ViewMs.StartMs}" EndMs="{Binding Project.ProjectData.ViewMs.EndMs}"
+                                         CursorMs="{Binding Project.ProjectData.MarkInMs}"
+                                         Foreground="Gray"
+                                         ></local:CursorControl>
+                            <local:CursorControl x:Name="x_CursorControl_2"  HorizontalAlignment="Stretch"
+                                                 Opacity="0.5"
+                                                 Foreground="Blue"
+                                         StartMs="{Binding Project.ProjectData.ViewMs.StartMs}" EndMs="{Binding Project.ProjectData.ViewMs.EndMs}"
+                                         CursorMs="{Binding Project.ProjectData.CursorMs}"
+                                         ></local:CursorControl>
+
                             <local:SubtitlesControl x:Name="x_SubtitlesControl"  HorizontalAlignment="Stretch"
                                                     OffsetFrames="{Binding Project.ProjectSettings.OffsetFrames}"
                                                     FrameRate="{Binding Project.ProjectSettings.FrameRate}"
                                          StartMs="{Binding Project.ProjectData.ViewMs.StartMs}" EndMs="{Binding Project.ProjectData.ViewMs.EndMs}"
                                          ></local:SubtitlesControl>
-                            <local:CursorControl x:Name="x_CursorControl_MarkIn"  HorizontalAlignment="Stretch"
-                                         StartMs="{Binding Project.ProjectData.ViewMs.StartMs}" EndMs="{Binding Project.ProjectData.ViewMs.EndMs}"
-                                         CursorMs="{Binding Project.ProjectData.MarkInMs}"
-                                         Foreground="Blue"
-                                         ></local:CursorControl>
-                            <local:CursorControl x:Name="x_CursorControl"  HorizontalAlignment="Stretch"
-                                         StartMs="{Binding Project.ProjectData.ViewMs.StartMs}" EndMs="{Binding Project.ProjectData.ViewMs.EndMs}"
-                                         CursorMs="{Binding Project.ProjectData.CursorMs}"
-                                         ></local:CursorControl>
                         </Grid>
                     </Grid>
-
-
-
                 </Grid>
 
-                <Grid Grid.Column="1">
+                <Grid Grid.Column="1" Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
@@ -92,21 +111,7 @@
                     <StackPanel Orientation="Horizontal" Grid.Row="0"  HorizontalAlignment="Center" x:Name="x_StackPanel_TextCommands">
                     </StackPanel>
 
-                    <local:WrappedTextBox x:Name="x_TextBox" 
-                             Grid.Row="1"
-                             ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                          Text="{Binding Project.ProjectData.Text}" 
-                             >
-                        <!--
-                        Mode=TwoWay, UpdateSourceTrigger=PropertyChanged
-                        <RichTextBox.CaretBrush>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="Red" Offset="0" />
-                                    <GradientStop Color="Red" Offset="1" />
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </RichTextBox.CaretBrush>-->
+                    <local:WrappedTextBox x:Name="x_TextBox" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" Text="{Binding Project.ProjectData.Text, Mode=TwoWay}" >
                     </local:WrappedTextBox>
                 </Grid>
             </Grid>

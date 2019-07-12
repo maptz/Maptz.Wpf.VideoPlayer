@@ -21,12 +21,14 @@ namespace Maptz.QuickVideoPlayer
         public ITimeCodeDocumentParser<string> TimeCodeDocumentParser { get; }
         public ITimeCodeDocumentTimeValidator<string> TimeCodeDocumentTimeValidator { get; }
 
-        public ITimeCodeDocument<string> GetSubtitles(string str)
+        public Task<ITimeCodeDocument<string>> GetSubtitlesAsync(string str)
         {
-            var tcd = this.TimeCodeDocumentParser.Parse(str);
-            tcd = this.TimeCodeDocumentTimeValidator.EnsureValidTimes(tcd);
-            return tcd;
+            return Task.Run(() =>
+            {
+                var tcd = this.TimeCodeDocumentParser.Parse(str);
+                tcd = this.TimeCodeDocumentTimeValidator.EnsureValidTimes(tcd);
+                return tcd;
+            });
         }
-
     }
 }

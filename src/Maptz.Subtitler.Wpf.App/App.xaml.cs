@@ -5,9 +5,11 @@ using Maptz.Editing.TimeCodeDocuments.Converters.All;
 using Maptz.Editing.TimeCodeDocuments.StringDocuments;
 using Maptz.QuickVideoPlayer.Commands;
 using Maptz.QuickVideoPlayer.Services;
+using Maptz.Subtitler.Engine.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
@@ -98,9 +100,17 @@ namespace Maptz.QuickVideoPlayer
             services.Configure<TimeCodeDocumentTimeValidatorSettings>(settings =>
             {
                 settings.DefaultDurationFrames = 60;
-            }
+            });
 
-            );
+            services.AddSingleton<IPluginEngine, PluginEngine>();
+            services.Configure<PluginEngineSettings>(settings =>
+            {
+                settings.PluginPaths = new List<string>
+                {
+                    @"X:\+++DEV\MaptzGitHub\wpf\maptz.wpf.videoplayer\src\Maptz.Subtitler.PluginTest\bin\Debug\netcoreapp3.0\Maptz.Subtitler.PluginTest.dll"
+                };
+            });
+
             /* #endregion*/
             DefaultCommands.AddCommandProviders(services);
         }

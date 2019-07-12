@@ -16,6 +16,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ruleset", "Ruleset", "{2CE7
 		..\Analyzers.ruleset = ..\Analyzers.ruleset
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maptz.Subtitler.PluginTest", "Maptz.Subtitler.PluginTest\Maptz.Subtitler.PluginTest.csproj", "{7314686E-6C98-46B8-A8E3-B8C702C637FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{BBE6AD72-9E01-404F-8DC3-AE317524BD40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{B6FC8C79-146D-4D4E-B69B-E38228D2AC0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,9 +44,19 @@ Global
 		{3719FA02-8F9B-4611-9D29-0B8B77E617F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3719FA02-8F9B-4611-9D29-0B8B77E617F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3719FA02-8F9B-4611-9D29-0B8B77E617F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7314686E-6C98-46B8-A8E3-B8C702C637FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7314686E-6C98-46B8-A8E3-B8C702C637FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7314686E-6C98-46B8-A8E3-B8C702C637FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7314686E-6C98-46B8-A8E3-B8C702C637FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E03325BE-0D29-4C84-95E8-E23BF5D86C1E} = {BBE6AD72-9E01-404F-8DC3-AE317524BD40}
+		{1B34EC1B-175A-49B5-9785-73F3B8FE8CFA} = {BBE6AD72-9E01-404F-8DC3-AE317524BD40}
+		{3719FA02-8F9B-4611-9D29-0B8B77E617F5} = {BBE6AD72-9E01-404F-8DC3-AE317524BD40}
+		{7314686E-6C98-46B8-A8E3-B8C702C637FB} = {B6FC8C79-146D-4D4E-B69B-E38228D2AC0E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E0EF3DD-40E0-4DF7-858C-20D7CE5D1F80}
