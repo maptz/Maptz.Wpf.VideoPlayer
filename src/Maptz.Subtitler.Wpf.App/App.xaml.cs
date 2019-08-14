@@ -19,46 +19,21 @@ namespace Maptz.QuickVideoPlayer
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application, IApp
-    { 
-        public string FFMPEGPath => Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "ffmpeg.exe");
-        
-
-        public IServiceProvider ServiceProvider
+    {
+        public App()
         {
-            get;
-            private set;
+            this.DispatcherUnhandledException += new System.Windows.Threading.DispatcherUnhandledExceptionEventHandler((s, e) =>
+            {
+                System.Diagnostics.Debugger.Break();
+            });
+
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
+                System.Diagnostics.Debugger.Break();
+            };
         }
 
-        public IAppCommandEngine CommandEngine
-        {
-            get;
-            private set;
-        }
-
-        public ISessionStateService SessionStateService
-        {
-            get;
-            private set;
-        }
-
-        public SessionState SessionState
-        {
-            get;
-            private set;
-        }
-
-        public AppState AppState
-        {
-            get;
-            private set;
-        }
-
-        public IConfiguration Configuration
-        {
-            get;
-            private set;
-        }
-
+        /* #region Private Methods */
         private void ConfigureServices(IServiceCollection services)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -114,13 +89,13 @@ namespace Maptz.QuickVideoPlayer
             /* #endregion*/
             DefaultCommands.AddCommandProviders(services);
         }
-
+        /* #endregion Private Methods */
+        /* #region Protected Methods */
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
             this.SessionStateService.SaveSessionState(this.SessionState);
         }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             /* #region Initialize Configuration */
@@ -142,7 +117,7 @@ namespace Maptz.QuickVideoPlayer
             }
             else
             {
-                this.AppState.Project = new Project{};
+                this.AppState.Project = new Project { };
             }
 
             /* #region Create the Main Window */
@@ -159,5 +134,41 @@ namespace Maptz.QuickVideoPlayer
             this.AppState.TextBox = mainWindow.x_TextBox;
             base.OnStartup(e);
         }
+        /* #endregion Protected Methods */
+        /* #region Public Properties */
+        public AppState AppState
+        {
+            get;
+            private set;
+        }
+        public IAppCommandEngine CommandEngine
+        {
+            get;
+            private set;
+        }
+        public IConfiguration Configuration
+        {
+            get;
+            private set;
+        }
+        public string FFMPEGPath => Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "ffmpeg.exe");
+        public SessionState SessionState
+        {
+            get;
+            private set;
+        }
+        public ISessionStateService SessionStateService
+        {
+            get;
+            private set;
+        }
+        /* #endregion Public Properties */
+        /* #region Interface: 'Maptz.QuickVideoPlayer.Services.IApp' Properties */
+        public IServiceProvider ServiceProvider
+        {
+            get;
+            private set;
+        }
+        /* #endregion Interface: 'Maptz.QuickVideoPlayer.Services.IApp' Properties */
     }
 }

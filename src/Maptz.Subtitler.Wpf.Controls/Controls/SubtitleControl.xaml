@@ -17,7 +17,7 @@
         </Grid>
 
         <Border x:Name="x_Border_Bottom"  Grid.Row="1" BorderBrush="White"></Border>
-        <l2:TouchTextControl Grid.Row="1" x:Name="x_TouchTextControl" Margin="10"></l2:TouchTextControl>
+        <!--<l2:TouchTextControl Grid.Row="1" x:Name="x_TouchTextControl" Margin="10"></l2:TouchTextControl>-->
         
     </Grid>
 </UserControl>

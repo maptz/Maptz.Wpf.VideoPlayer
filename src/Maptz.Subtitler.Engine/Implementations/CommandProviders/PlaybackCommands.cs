@@ -24,8 +24,14 @@ namespace Maptz.QuickVideoPlayer.Commands
 
     public class PlaybackCommands : CommandProviderBase
     {
+        public override IEnumerable<IAppCommand> GetAllCommands()
+        {
+            var ret =  base.GetAllCommands();
+            return ret;
+        }
+
         /* #region Private Fields */
-        private const string SMPTEREGEXSTRING = "(?<Hours>\\d{2}):(?<Minutes>\\d{2}):(?<Seconds>\\d{2})(?::|;)(?<Frames>\\d{2})";
+        private const string SMPTEREGEXSTRING = "(?<intc>\\d{2}[:\\.]\\d{2}[:\\.]\\d{2}([:\\.]\\d{2})*)\\s*(?<outtc>(\\d{2}[:\\.]\\d{2}[:\\.]\\d{2}([:\\.]\\d{2})*)*)"; //\\s*(?<outtc>(\\d{2}[:\\.]\\d{2}[:\\.]\\d{2}([:\\.]\\d{2})*)*
         /* #endregion Private Fields */
         /* #region Private Methods */
         private void SeekToPreviousTimecode()
@@ -37,7 +43,8 @@ namespace Maptz.QuickVideoPlayer.Commands
             if (lastTimeCodeMatches.Count > 0)
             {
                 var lastmatch = lastTimeCodeMatches[lastTimeCodeMatches.Count -1];
-                var tc = new TimeCode(lastmatch.Value, appState.Project.ProjectSettings.FrameRate);
+                var lastIn = lastmatch.Groups["intc"].Value;
+                var tc = new TimeCode(lastIn, appState.Project.ProjectSettings.FrameRate);
                 var offsetMs = 1000.0 * (tc.TotalSeconds - appState.Project.ProjectSettings.OffsetTimeCode.TotalSeconds);
                 //appState.Project.ProjectData.CursorMs = (long)offsetMs;
                 appState.VideoPlayerState.MediaElement.Seek(TimeSpan.FromMilliseconds(offsetMs));
@@ -87,14 +94,14 @@ namespace Maptz.QuickVideoPlayer.Commands
         public IAppCommand FrameForwardCommand => new AppCommand("FrameForwardVideo", (object o) => this.SkipFrames(1), new KeyChords(new KeyChord(Key.OemPeriod, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.skip_next));
         public IAppCommand PauseCommand => new AppCommand("PauseVideo", (object o) => this.Pause(),  null,new XamlIconSource(IconPaths3.play_pause));
         public IAppCommand PlayCommand => new AppCommand("PlayVideo", (object o) => this.Play(), null,  new XamlIconSource(IconPaths3.play_pause));
-        public IAppCommand SeekToPreviousTimecodeCommand => new AppCommand(nameof(SeekToPreviousTimecodeCommand), (object o) => this.SeekToPreviousTimecode(), new KeyChords(new KeyChord(Key.Q, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.play_pause));
+        public IAppCommand SeekToPreviousTimecodeCommand => new AppCommand(nameof(SeekToPreviousTimecodeCommand), (object o) => this.SeekToPreviousTimecode(), new KeyChords(new KeyChord(Key.Q, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.play_pause));
         public IAppCommand SeekToStartCommand => new AppCommand("SeekStartVideo", (object o) => this.Seek(0.0), new KeyChords(new KeyChord(Key.Home, ctrl: true, alt: true)), new XamlIconSource(IconPaths3.skip_backward));
         public IServiceProvider ServiceProvider { get; }
         public IAppCommand SkipBackwardCommand => new AppCommand("SkipBackwardVideo", (object o) => this.Skip(-2.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.skip_previous));
         public IAppCommand SkipFastBackwardVideoCommand => new AppCommand("SkipFastBackwardVideo", (object o) => this.Skip(-5.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.skip_backward));
         public IAppCommand SkipFastForwardVideoCommand => new AppCommand("SkipFastForwardVideo", (object o) => this.Skip(-5.0), new KeyChords(new KeyChord(Key.J, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.skip_forward));
         public IAppCommand SkipForwardCommand => new AppCommand("SkipForwardVideo", (object o) => this.Skip(2.0), new KeyChords(new KeyChord(Key.L, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.skip_next));
-        public IAppCommand TogglePlayStateCommand => new AppCommand("ToggleVideoPlayState", (object o) => this.TogglePlayState(), new KeyChords(new KeyChord(Key.Space, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.play_pause));
+        public IAppCommand TogglePlayStateCommand => new AppCommand("ToggleVideoPlayState", (object o) => this.TogglePlayState(), new KeyChords(new KeyChord(Key.K, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.play_pause));
         /* #endregion Public Properties */
         /* #region Public Constructors */
         public PlaybackCommands(IServiceProvider serviceProvider)

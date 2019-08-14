@@ -36,7 +36,9 @@ namespace Maptz.QuickVideoPlayer.Services
                 json = sr.ReadToEnd();
             }
 
+
             var retval = JsonConvert.DeserializeObject<SessionState>(json);
+            retval.LastOpenProjectPath = @"C:\Users\steph\OneDrive\Desktop\SUBTITLES\PULLS.IV.4000.04.02.json";
             return retval;
         }
 

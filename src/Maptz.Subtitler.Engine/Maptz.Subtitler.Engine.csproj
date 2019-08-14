@@ -28,5 +28,11 @@
     <ProjectReference Include="..\Maptz.Subtitler.Base\Maptz.Subtitler.Base.csproj" />
     <ProjectReference Include="..\Maptz.Subtitler.Wpf.Controls\Maptz.Subtitler.Wpf.Controls.csproj" />
   </ItemGroup>
+
+  
+
+  <ItemGroup>
+    <Folder Include="obj\" />
+  </ItemGroup>
   
 </Project>

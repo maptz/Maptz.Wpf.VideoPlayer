@@ -47,7 +47,7 @@ namespace Maptz.QuickVideoPlayer
             }
         }
 
-        private string _text;
+        private string _text= string.Empty;
         public string Text
         {
             get => this._text;
