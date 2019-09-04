@@ -64,9 +64,17 @@ namespace Maptz.Subtitler.Engine.Implementations
             List<IPluginInstance> pluginInstances = new List<IPluginInstance>();
             foreach (var path in this.Settings.PluginPaths)
             {
-                var ass = LoadPluginAssembly(path);
-                var instances = CreatePluginInstances(ass);
-                pluginInstances.AddRange(instances);
+                if (File.Exists(path))
+                {
+                    var ass = LoadPluginAssembly(path);
+                    var instances = CreatePluginInstances(ass);
+                    pluginInstances.AddRange(instances);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Warning cannot find plugin at path '{path}'.");
+                }
+                
             }
 
             return pluginInstances;
