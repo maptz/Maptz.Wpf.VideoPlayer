@@ -44,10 +44,19 @@ namespace Maptz.QuickVideoPlayer.Commands
             {
                 var lastmatch = lastTimeCodeMatches[lastTimeCodeMatches.Count -1];
                 var lastIn = lastmatch.Groups["intc"].Value;
-                var tc = new TimeCode(lastIn, appState.Project.ProjectSettings.FrameRate);
-                var offsetMs = 1000.0 * (tc.TotalSeconds - appState.Project.ProjectSettings.OffsetTimeCode.TotalSeconds);
-                //appState.Project.ProjectData.CursorMs = (long)offsetMs;
-                appState.VideoPlayerState.MediaElement.Seek(TimeSpan.FromMilliseconds(offsetMs));
+                lastIn = lastIn.Replace('.', ':');
+                try
+                {
+                    var tc = new TimeCode(lastIn, appState.Project.ProjectSettings.FrameRate);
+                    var offsetMs = 1000.0 * (tc.TotalSeconds - appState.Project.ProjectSettings.OffsetTimeCode.TotalSeconds);
+                    //appState.Project.ProjectData.CursorMs = (long)offsetMs;
+                    appState.VideoPlayerState.MediaElement.Seek(TimeSpan.FromMilliseconds(offsetMs));
+                }
+                catch
+                {
+                    //TODO: Exception has been swallowed
+                }
+                
             }
         }
         private bool ValidatePosition(MediaElement me, TimeSpan newPosition)

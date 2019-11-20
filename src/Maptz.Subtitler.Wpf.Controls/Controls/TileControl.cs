@@ -85,19 +85,21 @@ namespace Maptz.QuickVideoPlayer
 
             this.Loaded += async (s, exx) =>
             {
-                var bitmap = await this.LoadImageAsync();
-                this.Image.Source = bitmap;
-                this.Image.Stretch = Stretch.Fill;
+                try
+                {
+                    var bitmap = await this.LoadImageAsync();
+                    this.Image.Source = bitmap;
+                    this.Image.Stretch = Stretch.Fill;
+                }
+                catch (Exception ex)
+                {
+                    //throw ex;
+                }
+          
             };
 
-            try
-            {
-                
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+          
+            
 
         }
 
