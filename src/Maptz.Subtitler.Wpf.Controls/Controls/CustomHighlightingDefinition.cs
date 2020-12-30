@@ -1,15 +1,9 @@
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Diagnostics;
-using Maptz.Editing.TimeCodeDocuments;
-using ICSharpCode.AvalonEdit;
-using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Highlighting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace Maptz.QuickVideoPlayer
+using System.Windows.Media;
+namespace Maptz.Subtitler.Wpf.Controls
 {
     public class CustomHighlightingDefinition : IHighlightingDefinition
     {

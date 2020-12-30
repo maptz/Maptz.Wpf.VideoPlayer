@@ -1,36 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <CodeAnalysisRuleSet>..\..\Analyzers.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Controls\SubtitleControl.xaml" />
-    <None Remove="Windows\ProjectSettingsWindow.xaml" />
-  </ItemGroup>
-
-
   
   <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="5.0.4" />
-    <PackageReference Include="FFME.Windows" Version="4.1.310" />
-    <PackageReference Include="Maptz.Audio.WavFiles.SamplePlotter" Version="0.0.21" />
+    <PackageReference Include="AvalonEdit" Version="6.0.1" />
     <PackageReference Include="Maptz.Editing.TimeCodeDocuments.Converters.All" Version="0.0.17" />
-    <PackageReference Include="Maptz.Tiles.Base" Version="0.0.7" />
-    <PackageReference Include="Maptz.TimeCode.Base" Version="0.0.14" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
   </ItemGroup>
-
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\Maptz.Subtitler.Base\Maptz.Subtitler.Base.csproj" />
+    <ProjectReference Include="..\Maptz.Subtitler.App.Base\Maptz.Subtitler.App.Base.csproj" />
   </ItemGroup>
+
 
 </Project>

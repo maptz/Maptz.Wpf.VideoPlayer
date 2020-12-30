@@ -3,7 +3,7 @@ using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Rendering;
 using ICSharpCode.AvalonEdit.Document;
 
-namespace Maptz.QuickVideoPlayer
+namespace Maptz.Subtitler.Wpf.Controls
 {
     /// <summary>
     /// Finds the word 'AvalonEdit' and makes it bold and italic.

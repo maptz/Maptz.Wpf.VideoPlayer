@@ -1,17 +1,11 @@
-﻿using Maptz.QuickVideoPlayer.Commands;
-using Maptz.QuickVideoPlayer.Services;
+﻿using Maptz.Subtitler.App;
+using Maptz.Subtitler.App.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Input;
 
-namespace Maptz.QuickVideoPlayer
+namespace Maptz.Subtitler.Wpf.Controls
 {
 
     public class CommandPalette : WrapPanel

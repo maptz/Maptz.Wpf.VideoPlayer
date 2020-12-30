@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Maptz.Subtitler.App.Base\Maptz.Subtitler.App.Base.csproj" />
+    <ProjectReference Include="..\Maptz.Subtitler.Engine\Maptz.Subtitler.Engine.csproj" />
+    <ProjectReference Include="..\Maptz.Subtitler.Wpf.Controls\Maptz.Subtitler.Wpf.Controls.csproj" />
+    <PackageReference Include="FFME.Windows" Version="4.3.340" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Implementations\CommandProviders\Base\" />
+  </ItemGroup>
+
+</Project>

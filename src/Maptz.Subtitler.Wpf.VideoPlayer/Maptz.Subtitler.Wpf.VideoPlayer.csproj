@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <UseWPF>true</UseWPF>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="FFME.Windows" Version="4.3.340" />
+    <PackageReference Include="Maptz.Editing.TimeCodeDocuments.Converters.All" Version="0.0.17" />
+    <ProjectReference Include="..\Maptz.Subtitler.App.Base\Maptz.Subtitler.App.Base.csproj" />
+    <ProjectReference Include="..\Maptz.Subtitler.Engine\Maptz.Subtitler.Engine.csproj" />
+    <ProjectReference Include="..\Maptz.Subtitler.Wpf.Controls\Maptz.Subtitler.Wpf.Controls.csproj" />
+    <ProjectReference Include="..\Maptz.Subtitler.Wpf.Engine\Maptz.Subtitler.Wpf.Engine.csproj" />
+  </ItemGroup>
+
+</Project>

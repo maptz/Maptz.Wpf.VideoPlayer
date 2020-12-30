@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Maptz.Subtitler.Base\Maptz.Subtitler.Base.csproj" >
-      <Private>false</Private>
-    </ProjectReference>
+    <ProjectReference Include="..\Maptz.Subtitler.App.Base\Maptz.Subtitler.App.Base.csproj" />
   </ItemGroup>
 
 </Project>

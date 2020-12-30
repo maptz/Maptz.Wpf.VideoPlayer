@@ -1,17 +1,18 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Maptz.QuickVideoPlayer;assembly=Maptz.Subtitler.Wpf.Controls">
+                    xmlns:converters="clr-namespace:Maptz.Subtitler.Wpf.Engine.Converters;assembly=Maptz.Subtitler.Wpf.Engine"
+                    xmlns:localcontrols="clr-namespace:Maptz.Subtitler.Wpf.Controls;assembly=Maptz.Subtitler.Wpf.Controls">
 
-    <local:BoolVisibilityConverter x:Key="BoolVisibilityConverter"></local:BoolVisibilityConverter>
-    <local:MsToTimeCodeConverter x:Key="MsToTimeCodeConverter"></local:MsToTimeCodeConverter>
-    <local:MsToTimeSpanConverter x:Key="MsToTimeSpanConverter"></local:MsToTimeSpanConverter>
-    <local:ViewMsToViewportConverter x:Key="ViewMsToViewportConverter"></local:ViewMsToViewportConverter>
-    <local:TimeCodeToStringConverter x:Key="TimeCodeToStringConverter" />
-    <local:StringToUriConverter x:Key="StringToUriConverter" />
+    <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"></converters:BoolVisibilityConverter>
+    <converters:MsToTimeCodeConverter x:Key="MsToTimeCodeConverter"></converters:MsToTimeCodeConverter>
+    <converters:MsToTimeSpanConverter x:Key="MsToTimeSpanConverter"></converters:MsToTimeSpanConverter>
+    <converters:ViewMsToViewportConverter x:Key="ViewMsToViewportConverter"></converters:ViewMsToViewportConverter>
+    <converters:TimeCodeToStringConverter x:Key="TimeCodeToStringConverter" />
+    <converters:StringToUriConverter x:Key="StringToUriConverter" />
 
 
     <!-- The material design icons are based on a 24x24 unit grid -->
-    <Style x:Key="MaterialDesignIcon" TargetType="local:VectorIcon">
+    <Style x:Key="MaterialDesignIcon" TargetType="localcontrols:VectorIcon">
         <Style.Setters>
             <Setter Property="PathHeight" Value="24"/>
             <Setter Property="PathWidth" Value="24"/>
@@ -28,7 +29,7 @@
     http://modernuiicons.com/
     -->
     <Style x:Key="CopyIcon" 
-         TargetType="local:VectorIcon" 
+         TargetType="localcontrols:VectorIcon" 
          BasedOn="{StaticResource MaterialDesignIcon}">
         <Style.Setters>
             <Setter Property="Geometry">

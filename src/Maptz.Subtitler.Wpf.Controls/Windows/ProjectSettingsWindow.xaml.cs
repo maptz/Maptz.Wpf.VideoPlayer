@@ -1,20 +1,9 @@
-﻿using Maptz.QuickVideoPlayer.Services;
+﻿using Maptz.Subtitler.App.Projects;
+using Maptz.Subtitler.App.SessionState;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Maptz.QuickVideoPlayer
 {
@@ -24,7 +13,7 @@ namespace Maptz.QuickVideoPlayer
     public partial class ProjectSettingsWindow : Window
     {
         public ProjectSettingsWindowViewModel ViewModel { get; }
-        public ProjectSettings ProjectSettings { get; }
+        public ProjectSettingsEx ProjectSettings { get; }
         public IServiceProvider ServiceProvider { get; }
 
         private void SetupViewModel()
@@ -41,7 +30,7 @@ namespace Maptz.QuickVideoPlayer
 
 
 
-        public ProjectSettingsWindow(ProjectSettings projectSettings = null, IServiceProvider serviceProvider = null)
+        public ProjectSettingsWindow(ProjectSettingsEx projectSettings = null, IServiceProvider serviceProvider = null)
         {
             InitializeComponent();
             var vm = new ProjectSettingsWindowViewModel();
