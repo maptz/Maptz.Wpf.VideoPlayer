@@ -1,7 +1,5 @@
-using Maptz.QuickVideoPlayer;
 using Maptz.Subtitler.App.Commands;
 using Maptz.Subtitler.App.Projects;
-using Maptz.Subtitler.Wpf.App;
 using Maptz.Subtitler.Wpf.Controls;
 using Maptz.Subtitler.Wpf.Engine.Icons;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,12 +41,12 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
         }
         private void InsertTimeCodeFromCursor()
         {
-            var projectData = this.ServiceProvider.GetRequiredService<ProjectDataEx>();
+            var projectData = this.ServiceProvider.GetRequiredService<ICursorProjectData>();
             this.InsertTimeCodeAt(projectData.CursorMs);
         }
         private void InsertTimeCodeFromMarkIn()
         {
-            var projectData = this.ServiceProvider.GetRequiredService<ProjectDataEx>();
+            var projectData = this.ServiceProvider.GetRequiredService<IMarkingProjectData>();
             this.InsertTimeCodeAt(projectData.MarkInMs);
         }
         private void MoveCursorToNextGrammar(bool forward = true)

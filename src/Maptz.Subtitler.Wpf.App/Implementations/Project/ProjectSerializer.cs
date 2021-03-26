@@ -1,13 +1,14 @@
 
+using Maptz.Subtitler.App.Projects;
+using Maptz.Subtitler.Wpf.App;
 using System.IO;
-using System.Text.Json;
-namespace Maptz.Subtitler.App.Projects
+namespace Maptz.Subtitler.App.Wpf.App
 {
 
 
-    public class ProjectSerializer : IProjectSerializer<ProjectDataBase, ProjectSettingsBase>
+    public class ProjectSerializer : IProjectSerializer
     {
-        public IProject<ProjectDataBase, ProjectSettingsBase> ReadProject(string projectFilePath)
+        public IProject ReadProject(string projectFilePath)
         {
             var fi = new FileInfo(projectFilePath);
             if (!fi.Exists)
@@ -26,7 +27,7 @@ namespace Maptz.Subtitler.App.Projects
             return project;
         }
 
-        public void SaveProject(IProject<ProjectDataBase, ProjectSettingsBase> project)
+        public void SaveProject(IProject project)
         {
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(project);
             //string json = JsonSerializer.Serialize(project); ;
@@ -39,8 +40,6 @@ namespace Maptz.Subtitler.App.Projects
             (project as Project).SetDirty(false);
         }
 
-        IProject IProjectSerializer.ReadProject(string projectFilePath) => this.ReadProject(projectFilePath);
-
-        void IProjectSerializer.SaveProject(IProject project) => this.SaveProject(project as IProject<ProjectDataBase, ProjectSettingsBase>);
+      
     }
 }

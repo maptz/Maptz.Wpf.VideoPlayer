@@ -5,7 +5,7 @@ using Microsoft.Win32;
 using System;
 using System.Windows;
 
-namespace Maptz.QuickVideoPlayer
+namespace Maptz.Subtitler.Wpf.App
 {
     /// <summary>
     /// Interaction logic for ProjectSettingsWindow.xaml

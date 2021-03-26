@@ -1,7 +1,11 @@
-namespace Maptz.Subtitler.App.Projects
+using Maptz.Subtitler.App.Projects;
+using Maptz.Subtitler.Wpf.VideoPlayer;
+using Maptz.Subtitler.Wpf.VideoPlayer.Projects;
+
+namespace Maptz.Subtitler.Wpf.App
 {
 
-    public class ProjectDataEx : ProjectDataBase
+    public class ProjectDataEx : ProjectDataBase, IVideoPlayerProjectData, ITimelineProjectData
     {
         private long? _markInMs;
         public long? MarkInMs
@@ -48,7 +52,6 @@ namespace Maptz.Subtitler.App.Projects
             }
         }
 
-       
-
+        
     }
 }

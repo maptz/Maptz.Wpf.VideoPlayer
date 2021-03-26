@@ -48,6 +48,14 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
         }
         /* #endregion Public Constructors */
         /* #region Interface: 'Maptz.QuickVideoPlayer.Commands.IAppCommandEngine' Methods */
+        public void AddCommandsFromType<T>() where T : ICommandProvider
+        {
+            var t = (ICommandProvider) this.ServiceProvider.GetRequiredService(typeof(T));
+            var commands = t.GetAllCommands();
+            foreach(var command in commands) { AddCommand(command); }
+            
+        }
+
         public void AddCommand(IAppCommand appCommand)
         {
             if (this.AppCommands.Any(p => string.Equals(p.Name, appCommand.Name, StringComparison.OrdinalIgnoreCase)))

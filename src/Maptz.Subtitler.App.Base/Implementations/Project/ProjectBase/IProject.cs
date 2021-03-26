@@ -9,10 +9,4 @@ namespace Maptz.Subtitler.App.Projects
         IProjectData ProjectData { get; }
         IProjectSettings ProjectSettings { get; }
     }
-
-
-    public interface IProject<TData, TSettings> : IProject where TData : ProjectDataBase where TSettings : ProjectSettingsBase
-    {
-        string ProjectFilePath { get; set; }
-    }
 }

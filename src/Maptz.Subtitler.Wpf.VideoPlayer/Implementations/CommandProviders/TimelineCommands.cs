@@ -1,11 +1,12 @@
 using Maptz.Subtitler.App.Commands;
 using Maptz.Subtitler.App.Projects;
 using Maptz.Subtitler.Wpf.Engine.Icons;
+using Maptz.Subtitler.Wpf.VideoPlayer.Projects;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows.Input;
 
-namespace Maptz.Subtitler.Wpf.Engine.Commands
+namespace Maptz.Subtitler.Wpf.VideoPlayer.Commands
 {
     public class TimelineCommands : CommandProviderBase
     {
@@ -29,11 +30,12 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
         /* #region Public Methods */
         public void Zoom(double factor, double? centerMs = null)
         {
-            var projectData = this.ServiceProvider.GetRequiredService<ProjectDataEx>();
-            var ems = (double)projectData.ViewMs.EndMs;
-            var sms = (double)projectData.ViewMs.StartMs;
-            var maxSms = (double)projectData.ViewMs.MaxStartMs;
-            var maxEms = (double)projectData.ViewMs.MaxEndMs;
+            var timelineProjectData = this.ServiceProvider.GetRequiredService<ITimelineProjectData>();
+            var videoPlayerProjectData = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectData>();
+            var ems = (double)timelineProjectData.ViewMs.EndMs;
+            var sms = (double)timelineProjectData.ViewMs.StartMs;
+            var maxSms = (double)timelineProjectData.ViewMs.MaxStartMs;
+            var maxEms = (double)timelineProjectData.ViewMs.MaxEndMs;
             var wid = (ems - sms);
             var halfWid = wid / 2.0;
             double cms = sms + wid / 2.0;
@@ -41,9 +43,9 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
             {
                 cms = centerMs.Value;
             }
-            else if (projectData.CursorMs.HasValue)
+            else if (videoPlayerProjectData.CursorMs.HasValue)
             {
-                cms = projectData.CursorMs.Value;
+                cms = videoPlayerProjectData.CursorMs.Value;
             }
 
             var newStartMs = (long)(cms - halfWid * factor);
@@ -75,8 +77,8 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
                 }
             }
 
-            projectData.ViewMs.StartMs = newStartMs;
-            projectData.ViewMs.EndMs = newEndMs;
+            timelineProjectData.ViewMs.StartMs = newStartMs;
+            timelineProjectData.ViewMs.EndMs = newEndMs;
         }
     /* #endregion Public Methods */
     }

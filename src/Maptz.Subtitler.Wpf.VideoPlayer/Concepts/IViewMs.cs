@@ -1,4 +1,4 @@
-namespace Maptz.Subtitler.App
+namespace Maptz.Subtitler.Wpf.VideoPlayer
 {
 
   public interface IViewMs

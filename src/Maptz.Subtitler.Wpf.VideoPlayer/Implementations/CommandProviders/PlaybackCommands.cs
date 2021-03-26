@@ -1,21 +1,53 @@
 using Maptz.Subtitler.App.Commands;
 using Maptz.Subtitler.App.Projects;
+using Maptz.Subtitler.App.SessionState;
 using Maptz.Subtitler.Wpf.Controls;
 using Maptz.Subtitler.Wpf.Engine.Icons;
+using Maptz.Subtitler.Wpf.VideoPlayer;
+using Maptz.Subtitler.Wpf.VideoPlayer.Projects;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using Unosquare.FFME;
-namespace Maptz.Subtitler.Wpf.Engine.Commands
+namespace Maptz.Subtitler.Wpf.VideoPlayer.Commands
 {
-
-
 
 
     public class PlaybackCommands : CommandProviderBase
     {
+        public IAppCommand OpenVideoFileCommand => new AppCommand("OpenVideoFile", (object o) => this.OpenVideoFile((string)o), new KeyChords(new KeyChord(Key.O, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.file_video));
+
+        private void OpenVideoFile(string videoFilePath)
+        {
+            var sessionState = this.ServiceProvider?.GetRequiredService<SessionState>();
+            if (string.IsNullOrEmpty(videoFilePath))
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+
+                if (sessionState != null && !string.IsNullOrEmpty(sessionState.OpenVideoFileDirectoryPath) && Directory.Exists(sessionState.OpenVideoFileDirectoryPath))
+                {
+                    ofd.InitialDirectory = sessionState.OpenVideoFileDirectoryPath;
+                }
+                var result = ofd.ShowDialog();
+                if (result.HasValue && result.Value)
+                {
+                    videoFilePath = ofd.FileName;
+                }
+            }
+
+            var projectSettings = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectSettings>();
+            projectSettings.VideoFilePath = videoFilePath;
+            if (sessionState != null)
+            {
+                sessionState.OpenVideoFileDirectoryPath = System.IO.Path.GetDirectoryName(videoFilePath);
+            }
+
+        }
+
         public override IEnumerable<IAppCommand> GetAllCommands()
         {
             var ret =  base.GetAllCommands();
@@ -42,7 +74,7 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
                     var tc = new TimeCode(lastIn, projectSettings.FrameRate);
                     var offsetMs = 1000.0 * (tc.TotalSeconds - projectSettings.OffsetTimeCode.TotalSeconds);
                     //appState.Project.ProjectData.CursorMs = (long)offsetMs;
-                    var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
+                    var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
                     videoPlayerState.MediaElement.Seek(TimeSpan.FromMilliseconds(offsetMs));
                 }
                 catch
@@ -69,7 +101,7 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
             var multiple = increase ? 2.0 : 0.5;
             
             
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
             var rat = videoPlayerState.SpeedRatio;
             if (rat > 1.0)
             {
@@ -114,17 +146,17 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
         /* #region Public Methods */
         public void Pause()
         {
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
             videoPlayerState.MediaElement.Pause();
         }
         public void Play()
         {
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
             videoPlayerState.MediaElement.Play();
         }
         public void Seek(double seconds)
         {
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
             var me = videoPlayerState.MediaElement;
 
             //TODO validate seek is in range
@@ -136,7 +168,7 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
         }
         public void Skip(double seconds)
         {
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
             var me = videoPlayerState.MediaElement;
 
             //TODO validate seek is in range
@@ -148,8 +180,8 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
         }
         public void SkipFrames(long frames)
         {
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
-            var projectSettings = this.ServiceProvider.GetRequiredService<ProjectSettingsEx>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
+            var projectSettings = this.ServiceProvider.GetRequiredService<IProjectSettings>();
             var me = videoPlayerState.MediaElement;
 
             var fr = projectSettings.FrameRate;
@@ -165,7 +197,7 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
         }
         public void TogglePlayState()
         {
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
             var me = videoPlayerState.MediaElement;
             if (me.IsPaused)
             {

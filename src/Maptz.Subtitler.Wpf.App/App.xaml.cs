@@ -5,11 +5,16 @@ using Maptz.Subtitler.App;
 using Maptz.Subtitler.App.Commands;
 using Maptz.Subtitler.App.Projects;
 using Maptz.Subtitler.App.SessionState;
+using Maptz.Subtitler.App.Wpf.App;
 using Maptz.Subtitler.Engine;
+using Maptz.Subtitler.Wpf.App.Commands;
 using Maptz.Subtitler.Wpf.Controls;
 using Maptz.Subtitler.Wpf.Engine;
 using Maptz.Subtitler.Wpf.Engine.Commands;
 using Maptz.Subtitler.Wpf.Engine.Plugins;
+using Maptz.Subtitler.Wpf.VideoPlayer;
+using Maptz.Subtitler.Wpf.VideoPlayer.Commands;
+using Maptz.Subtitler.Wpf.VideoPlayer.Projects;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -83,18 +88,37 @@ namespace Maptz.Subtitler.Wpf.App
             services.AddTransient<AppState>(sp => this.AppState);
             services.AddTransient<SessionState>(sp => this.SessionState);
 
-            services.AddTransient<IProject>(sp => {
-                return this.AppState.Project;
-                });
-            services.AddTransient<IProjectSerializer>(sp=> new ProjectSerializer());
+            /* #region Project */
+            services.AddTransient<IProject>(sp =>
+                     {
+                         return this.AppState.Project;
+                     });
+            services.AddTransient<IProjectSerializer, ProjectSerializer>();
             services.AddSingleton<IProjectManager>(sp => new ProjectManager(this.AppState));
-
             services.AddTransient<IProjectSettings>(Span => this.AppState.Project.ProjectSettings);
+            services.AddTransient<IVideoPlayerProjectSettings>(Span => this.AppState.Project.ProjectSettings);
+
             services.AddTransient<IProjectData>(Span => this.AppState.Project.ProjectData);
+            services.AddTransient<ITimelineProjectData>(Span => this.AppState.Project.ProjectData);
+            services.AddTransient<IVideoPlayerProjectData>(Span => this.AppState.Project.ProjectData);
+            services.AddTransient<ICursorProjectData>(Span => this.AppState.Project.ProjectData);
+            services.AddTransient<IMarkingProjectData>(Span => this.AppState.Project.ProjectData);
+            /* #endregion*/
+
+
+            services.AddTransient<ProjectSettingsCommands>();
             services.AddSingleton<ISubtitleView>(sp => new SubtitleView(sp));
             //services.AddTransient<ILineSplitter, SimpleLineSplitter>();
             services.AddTransient<ILineSplitter, ComplexLineSplitter>();
             services.AddTransient<WrappedTextBox>(sp => (this.MainWindow as MainWindow).x_TextBox);
+
+            /* #region Video Playback */
+            services.AddTransient<MarkingCommands>();
+            services.AddTransient<PlaybackCommands>();
+            services.AddTransient<TimelineCommands>();
+            services.AddTransient<IVideoPlayerState>(sp => this.AppState.VideoPlayerState);
+            services.AddTransient<VideoWindow>();
+            /* #endregion*/
 
             /* #region TimeCodeDocuments */
             services.AddTransient<ISubtitleProvider, SubtitleProvider>();
@@ -124,6 +148,7 @@ namespace Maptz.Subtitler.Wpf.App
             /* #endregion*/
 
             DefaultCommands.AddCommandProviders(services);
+
         }
         /* #endregion Private Methods */
         /* #region Protected Methods */
@@ -147,9 +172,11 @@ namespace Maptz.Subtitler.Wpf.App
             this.ServiceProvider = serviceCollection.BuildServiceProvider();
             /* #endregion*/
             this.CommandEngine = this.ServiceProvider.GetRequiredService<IAppCommandEngine>();
+            this.ConfigureCommands(this.CommandEngine);
+
             this.SessionStateService = this.ServiceProvider.GetRequiredService<ISessionStateService>();
             this.SessionState = this.SessionStateService.GetLastSessionState();
-            
+
             if (!string.IsNullOrEmpty(this.SessionState.LastOpenProjectPath) && File.Exists(this.SessionState.LastOpenProjectPath))
             {
                 this.ServiceProvider.GetRequiredService<ProjectCommands>().OpenProject(this.SessionState.LastOpenProjectPath);
@@ -166,14 +193,24 @@ namespace Maptz.Subtitler.Wpf.App
             mainWindow.PreviewKeyDown += (s, ev) =>
             {
                 this.CommandEngine.RegisterKeyEvent(ev);
-            }
+            };
 
-            ;
             /* #endregion*/
-            this.AppState.VideoPlayerState = null;
+            //var videoWindow = ServiceProvider.GetRequiredService<VideoWindow>();
+            //videoWindow.Show(); ;
+            //this.AppState.VideoPlayerState.MediaElement = videoWindow.x_VideoPlayer.MediaElement;
             this.AppState.TextBox = mainWindow.x_TextBox;
             base.OnStartup(e);
         }
+
+        private void ConfigureCommands(IAppCommandEngine commandEngine)
+        {
+            commandEngine.AddCommandsFromType<MarkingCommands>();
+            commandEngine.AddCommandsFromType<PlaybackCommands>();
+            commandEngine.AddCommandsFromType<TimelineCommands>();
+            commandEngine.AddCommandsFromType<ProjectSettingsCommands>();
+        }
+
         /* #endregion Protected Methods */
         /* #region Public Properties */
         public AppState AppState

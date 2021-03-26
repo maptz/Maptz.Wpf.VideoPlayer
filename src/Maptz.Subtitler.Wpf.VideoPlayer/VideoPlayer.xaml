@@ -7,22 +7,23 @@
                 xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid x:Name="x_Grid_Media">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
-            <ffme:MediaElement Grid.Row="0" x:Name="Media"
+    <Grid x:Name="x_Grid_Media">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="40px"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ffme:MediaElement Grid.Row="0" x:Name="Media"
                                    Background="Black" LoadedBehavior="Play" UnloadedBehavior="Manual" />
 
-            <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="x_TextBlock_CurrentSubtitle" FontFamily="Consolas" Foreground="Red" FontSize="12" TextWrapping="WrapWithOverflow" 
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="x_TextBlock_CurrentSubtitle" FontFamily="Consolas" Foreground="Red" FontSize="12" TextWrapping="WrapWithOverflow" 
                                    Visibility="Collapsed"
                                    ></TextBlock>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="x_StackPanel_PlaybackCommands">
-                <TextBlock Text="{Binding SpeedRatio, ElementName=Media}" Foreground="Red"></TextBlock>
-            </StackPanel>
-        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" x:Name="x_StackPanel_PlaybackCommands">
+            <TextBlock Text="{Binding SpeedRatio, ElementName=Media}" Foreground="Red"></TextBlock>
+        </StackPanel>
+
+        <local:CursorControl x:Name="x_CursorControl"></local:CursorControl>
     </Grid>
 </UserControl>

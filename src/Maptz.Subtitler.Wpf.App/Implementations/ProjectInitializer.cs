@@ -1,8 +1,11 @@
+using Maptz.Subtitler.Wpf.App;
 using Maptz.Subtitler.Wpf.Engine;
+using System;
+
 namespace Maptz.Subtitler.App.Projects
 {
 
-    public class ProjectManager : IProjectManager<ProjectDataBase, ProjectSettingsBase>
+    public class ProjectManager : IProjectManager
     {
 
         public ProjectManager(AppState appState)
@@ -12,7 +15,9 @@ namespace Maptz.Subtitler.App.Projects
 
         public AppState AppState { get; }
 
-        public IProject<ProjectDataBase, ProjectSettingsBase> NewProject()
+        public event EventHandler<EventArgs> ProjectChanged;
+
+        public IProject NewProject()
         {
             var ret = new Project();
             return ret;
@@ -20,12 +25,14 @@ namespace Maptz.Subtitler.App.Projects
 
         public void SetProject(IProject project)
         {
-            AppState.Project = project;
+            AppState.Project = (Project) project;
+            RaiseProjectChanged();
         }
 
-        IProject IProjectManager.NewProject()
+        private void RaiseProjectChanged()
         {
-            return this.NewProject();
+            var pc = ProjectChanged;
+            if (pc != null) pc(this, new EventArgs());
         }
     }
 }

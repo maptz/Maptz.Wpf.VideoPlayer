@@ -1,4 +1,3 @@
-using Maptz.QuickVideoPlayer;
 using Maptz.Subtitler.App.Commands;
 using Maptz.Subtitler.App.Projects;
 using Maptz.Subtitler.App.SessionState;
@@ -12,7 +11,6 @@ using System.Windows.Input;
 
 namespace Maptz.Subtitler.Wpf.Engine.Commands
 {
-
 
     public class ProjectCommands : CommandProviderBase
     {
@@ -48,37 +46,11 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
             var projectInitializer = this.ServiceProvider.GetRequiredService<IProjectManager>();
             var newProject = projectInitializer.NewProject();
             projectInitializer.SetProject(newProject);
-            
+
             var sessionState = this.ServiceProvider.GetRequiredService<SessionState>();
             sessionState.LastOpenProjectPath = null;
-            this.ShowProjectSettings();
         }
-        private void OpenVideoFile(string videoFilePath)
-        {
-            var sessionState = this.ServiceProvider?.GetRequiredService<SessionState>();
-            if (string.IsNullOrEmpty(videoFilePath))
-            {
-                OpenFileDialog ofd = new OpenFileDialog();
 
-                if (sessionState != null && !string.IsNullOrEmpty(sessionState.OpenVideoFileDirectoryPath) && Directory.Exists(sessionState.OpenVideoFileDirectoryPath))
-                {
-                    ofd.InitialDirectory = sessionState.OpenVideoFileDirectoryPath;
-                }
-                var result = ofd.ShowDialog();
-                if (result.HasValue && result.Value)
-                {
-                    videoFilePath = ofd.FileName;
-                }
-            }
-
-            var projectSettings = this.ServiceProvider.GetRequiredService<ProjectSettingsEx>();
-            projectSettings.VideoFilePath = videoFilePath;
-            if (sessionState != null)
-            {
-                sessionState.OpenVideoFileDirectoryPath = System.IO.Path.GetDirectoryName(videoFilePath);
-            }
-
-        }
         private bool SaveProject(bool overrideFilePath = false)
         {
             var sessionState = this.ServiceProvider.GetRequiredService<SessionState>();
@@ -101,12 +73,7 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
             sessionState.LastOpenProjectPath = project.ProjectFilePath;
             return true;
         }
-        private void ShowProjectSettings()
-        {
-            var projectSettings = this.ServiceProvider.GetRequiredService<IProjectSettings>();
-            var projectSettingsWindow = new ProjectSettingsWindow(projectSettings as ProjectSettingsEx, this.ServiceProvider);
-            var result = projectSettingsWindow.ShowDialog();
-        }
+
         /* #endregion Private Methods */
         /* #region Public Properties */
         public IServiceProvider ServiceProvider { get; }
@@ -158,13 +125,13 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
             projectManager.SetProject(loadedProject);
 
         }
-        public IAppCommand OpenProjectCommand => new AppCommand("OpenProject", (object o) => this.OpenProject((string)o), new KeyChords(new KeyChord(Key.O, ctrl: true)),  new XamlIconSource(IconPaths3.file_video));
-        public IAppCommand OpenVideoFileCommand => new AppCommand("OpenVideoFile", (object o) => this.OpenVideoFile((string)o), new KeyChords(new KeyChord(Key.O, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.file_video));
+        public IAppCommand OpenProjectCommand => new AppCommand("OpenProject", (object o) => this.OpenProject((string)o), new KeyChords(new KeyChord(Key.O, ctrl: true)), new XamlIconSource(IconPaths3.file_video));
+
         public IAppCommand SaveProjectAsCommand => new AppCommand("SaveProjectAs", (object o) => this.SaveProject(true), new KeyChords(new KeyChord(Key.S, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.content_save_edit));
 
         public IAppCommand SaveProjectCommand => new AppCommand("SaveProject", (object o) => this.SaveProject(), new KeyChords(new KeyChord(Key.S, ctrl: true, shift: false)), new XamlIconSource(IconPaths3.content_save));
 
-        public IAppCommand ShowProjectSettingsCommand => new AppCommand("ShowProjectSettings", (object o) => this.ShowProjectSettings(), new KeyChords(new KeyChord(Key.P, ctrl: true, shift: true)), new XamlIconSource(IconPaths3.card_bulleted_settings));
+
 
         /* #endregion Public Methods */
         /* #region Interface: 'Maptz.QuickVideoPlayer.Commands.ICommandProvider' Methods */

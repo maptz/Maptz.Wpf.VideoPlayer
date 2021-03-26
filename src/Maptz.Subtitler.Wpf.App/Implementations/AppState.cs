@@ -1,11 +1,10 @@
-using Maptz.Subtitler.App.Projects;
+using Maptz.Subtitler.Wpf.App;
 using Maptz.Subtitler.Wpf.Controls;
+using Maptz.Subtitler.Wpf.VideoPlayer.Commands;
 using System.ComponentModel;
 
 namespace Maptz.Subtitler.Wpf.Engine
 {
-
-
 
     public class AppState : INotifyPropertyChanged
     {
@@ -15,7 +14,7 @@ namespace Maptz.Subtitler.Wpf.Engine
             set;
         }
 
-        private VideoPlayerState _videoPlayerState;
+        private VideoPlayerState _videoPlayerState = new VideoPlayerState();
         public VideoPlayerState VideoPlayerState
         {
             get => this._videoPlayerState;
@@ -30,8 +29,8 @@ namespace Maptz.Subtitler.Wpf.Engine
             }
         }
 
-        private IProject _project;
-        public IProject Project
+        private Project _project;
+        public Project Project
         {
             get => this._project;
             set

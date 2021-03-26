@@ -1,6 +1,6 @@
 using Maptz.Editing.TimeCodeDocuments;
 using System;
-namespace Maptz.Subtitler.Wpf.Controls.VideoPlayer
+namespace Maptz.Subtitler.Wpf.VideoPlayer.Commands
 {
 
     public class SubtitleHoverEventArgs : EventArgs

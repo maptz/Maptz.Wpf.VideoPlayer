@@ -1,6 +1,10 @@
+using Maptz.Subtitler.Wpf.VideoPlayer.Projects;
+
 namespace Maptz.Subtitler.App.Projects
 {
-    public class ProjectSettingsEx : ProjectSettingsBase
+
+    
+    public class ProjectSettingsEx : ProjectSettingsBase, IVideoPlayerProjectSettings
     {
         private string _videoFilePath;
         public string VideoFilePath

@@ -2,11 +2,11 @@ using System;
 using System.ComponentModel;
 using Unosquare.FFME;
 
-namespace Maptz.Subtitler.Wpf.Engine
+namespace Maptz.Subtitler.Wpf.VideoPlayer.Commands
 {
 
 
-    public class VideoPlayerState : INotifyPropertyChanged
+    public class VideoPlayerState : IVideoPlayerState, INotifyPropertyChanged
     {
         /* #region Private Methods */
         private void RaisePropertyChanged(string propertyName)
@@ -30,7 +30,7 @@ namespace Maptz.Subtitler.Wpf.Engine
         /* #region Public Properties */
         public bool IsPaused => this.MediaElement.IsPaused;
         public bool IsPlaying => this.MediaElement.IsPlaying;
-        public MediaElement MediaElement { get;  }
+        public MediaElement MediaElement { get; set; }
         public TimeSpan Position => this.MediaElement.Position;
 
 
@@ -51,9 +51,8 @@ namespace Maptz.Subtitler.Wpf.Engine
 
         /* #endregion Public Properties */
         /* #region Public Constructors */
-        public VideoPlayerState(MediaElement mediaElement)
+        public VideoPlayerState()
         {
-            this.MediaElement = mediaElement;
         }
         /* #endregion Public Constructors */
     }

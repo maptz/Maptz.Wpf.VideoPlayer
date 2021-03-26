@@ -1,24 +1,26 @@
 using Maptz.Subtitler.App.Commands;
 using Maptz.Subtitler.App.Projects;
 using Maptz.Subtitler.Wpf.Engine.Icons;
+using Maptz.Subtitler.Wpf.VideoPlayer;
+using Maptz.Subtitler.Wpf.VideoPlayer.Projects;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows.Input;
-namespace Maptz.Subtitler.Wpf.Engine.Commands
+namespace Maptz.Subtitler.Wpf.VideoPlayer.Commands
 {
     public class MarkingCommands : CommandProviderBase
     {
         /* #region Private Methods */
         private void ClearMarkInMs()
         {
-            var projectData = this.ServiceProvider.GetRequiredService<ProjectDataEx>();
+            var projectData = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectData>();
             projectData.MarkInMs = null;
         }
         private void SetMarkInMs(long? ms = null)
         {
 
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
-            var projectData = this.ServiceProvider.GetRequiredService<ProjectDataEx>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
+            var projectData = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectData>();
             if (ms == null)
             {
                 var markIn = (long)videoPlayerState.MediaElement.Position.TotalMilliseconds;

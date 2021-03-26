@@ -15,6 +15,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Maptz.Subtitler.App.Base\Maptz.Subtitler.App.Base.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Windows\" />
+  </ItemGroup>
 
 
 </Project>

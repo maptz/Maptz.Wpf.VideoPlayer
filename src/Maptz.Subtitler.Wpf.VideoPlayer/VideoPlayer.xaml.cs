@@ -4,6 +4,8 @@ using Maptz.Subtitler.Engine;
 using Maptz.Subtitler.Wpf.Controls;
 using Maptz.Subtitler.Wpf.Engine;
 using Maptz.Subtitler.Wpf.Engine.Commands;
+using Maptz.Subtitler.Wpf.VideoPlayer.Commands;
+using Maptz.Subtitler.Wpf.VideoPlayer.Projects;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -29,7 +31,11 @@ namespace Maptz.Subtitler.Wpf.VideoPlayer
     /// </summary>
     public partial class VideoPlayer : UserControl
     {
+
+        
         public IServiceProvider ServiceProvider { get; private set; }
+
+        public Unosquare.FFME.MediaElement MediaElement => this.Media;
 
         /* #region Private Methods */
         /// <summary>
@@ -82,13 +88,15 @@ namespace Maptz.Subtitler.Wpf.VideoPlayer
             this.ServiceProvider = serviceProvider;
             InvalidateCommandMenus();
 
+            this.x_CursorControl.Initialize(ServiceProvider);
+
             this.Media.ScrubbingEnabled = true;
 
             this._bindingWatchers = new List<BindingWatcherBase>();
 
-            var projectSettings = this.ServiceProvider.GetRequiredService<IProjectSettings>();
-            var projectData = this.ServiceProvider.GetRequiredService<IProjectData>();
-            var videoPlayerState = this.ServiceProvider.GetRequiredService<VideoPlayerState>();
+            var projectSettings = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectSettings>();
+            var projectData = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectData>();
+            var videoPlayerState = this.ServiceProvider.GetRequiredService<IVideoPlayerState>();
             {
                 var bw = new BindingWatcher<string>(projectSettings, "VideoFilePath");
                 bw.BindingChanged += (s, e) =>
@@ -163,7 +171,7 @@ namespace Maptz.Subtitler.Wpf.VideoPlayer
             ;
             Media.PositionChanged += (s, e) =>
             {
-                var projectData = this.ServiceProvider.GetRequiredService<ProjectDataEx>();
+                var projectData = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectData>();
                 projectData.CursorMs = (long)this.Media.ActualPosition?.TotalMilliseconds;
             }
 
@@ -360,12 +368,13 @@ namespace Maptz.Subtitler.Wpf.VideoPlayer
 
         private void Media_MediaOpened(object sender, MediaOpenedEventArgs e)
         {
-            var projectData = this.ServiceProvider.GetRequiredService<ProjectDataEx>();
+            var projectData = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectData>();
             projectData.CursorMs = (long)this.Media.Position.TotalMilliseconds;
-            projectData.ViewMs.MaxStartMs = 0;
-            projectData.ViewMs.MaxEndMs = (long)this.Media.NaturalDuration.Value.TotalMilliseconds;
-            projectData.ViewMs.StartMs = 0;
-            projectData.ViewMs.EndMs = (long)this.Media.NaturalDuration.Value.TotalMilliseconds;
+            var timelineProjectData = this.ServiceProvider.GetRequiredService<ITimelineProjectData>();
+            timelineProjectData.ViewMs.MaxStartMs = 0;
+            timelineProjectData.ViewMs.MaxEndMs = (long)this.Media.NaturalDuration.Value.TotalMilliseconds;
+            timelineProjectData.ViewMs.StartMs = 0;
+            timelineProjectData.ViewMs.EndMs = (long)this.Media.NaturalDuration.Value.TotalMilliseconds;
         }
 
         private void SetMediaSource(string filePath)
@@ -384,7 +393,7 @@ namespace Maptz.Subtitler.Wpf.VideoPlayer
 
         private void SyncVideoCursor()
         {
-            var projectData = this.ServiceProvider.GetRequiredService<ProjectDataEx>();
+            var projectData = this.ServiceProvider.GetRequiredService<IVideoPlayerProjectData>();
             var projectSettings = this.ServiceProvider.GetRequiredService<IProjectSettings>();
             var currentTCStr = "UNKNOWN";
             var currentSubStr = string.Empty;

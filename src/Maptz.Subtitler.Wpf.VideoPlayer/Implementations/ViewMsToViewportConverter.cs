@@ -1,6 +1,7 @@
 using Maptz.Audio.WavFiles.SamplePlotter;
 using Maptz.Subtitler.App;
 using Maptz.Subtitler.App.Projects;
+using Maptz.Subtitler.Wpf.VideoPlayer;
 using Maptz.Tiles;
 using System;
 using System.Globalization;

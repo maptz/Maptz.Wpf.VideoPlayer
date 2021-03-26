@@ -1,14 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:Maptz.Subtitler.Wpf.Engine.Converters;assembly=Maptz.Subtitler.Wpf.Engine"
+                    xmlns:videoconverters="clr-namespace:Maptz.Subtitler.Wpf.Engine.Converters;assembly=Maptz.Subtitler.Wpf.VideoPlayer"
                     xmlns:localcontrols="clr-namespace:Maptz.Subtitler.Wpf.Controls;assembly=Maptz.Subtitler.Wpf.Controls">
 
     <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"></converters:BoolVisibilityConverter>
     <converters:MsToTimeCodeConverter x:Key="MsToTimeCodeConverter"></converters:MsToTimeCodeConverter>
     <converters:MsToTimeSpanConverter x:Key="MsToTimeSpanConverter"></converters:MsToTimeSpanConverter>
-    <converters:ViewMsToViewportConverter x:Key="ViewMsToViewportConverter"></converters:ViewMsToViewportConverter>
     <converters:TimeCodeToStringConverter x:Key="TimeCodeToStringConverter" />
     <converters:StringToUriConverter x:Key="StringToUriConverter" />
+    <videoconverters:ViewMsToViewportConverter x:Key="ViewMsToViewportConverter"></videoconverters:ViewMsToViewportConverter>
 
 
     <!-- The material design icons are based on a 24x24 unit grid -->

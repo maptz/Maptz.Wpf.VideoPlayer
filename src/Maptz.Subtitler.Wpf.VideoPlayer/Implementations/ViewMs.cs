@@ -1,7 +1,7 @@
 using Maptz.Subtitler.App;
 using System;
 using System.ComponentModel;
-namespace Maptz.Subtitler.App.Projects
+namespace Maptz.Subtitler.Wpf.VideoPlayer
 {
 
 

@@ -1,4 +1,3 @@
-using Maptz.QuickVideoPlayer;
 using Maptz.Subtitler.App;
 using Maptz.Subtitler.Wpf.Controls;
 using System.Windows;

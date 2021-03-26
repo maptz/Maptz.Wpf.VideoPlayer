@@ -7,6 +7,7 @@ namespace Maptz.Subtitler.App.Commands
     {
         void AddCommand(IAppCommand appCommand);
         void ExecuteNamedCommand(string commandName, object parameter = null);
+        void AddCommandsFromType<T>() where T : ICommandProvider;
         void RegisterKeyEvent(KeyEventArgs ev);
         ObservableCollection<IAppCommand> AppCommands { get; }
     }

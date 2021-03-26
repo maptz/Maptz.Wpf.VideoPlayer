@@ -25,12 +25,9 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
                 return new Type[]
             {
                 typeof(AppCommands),
-                typeof(MarkingCommands),
                 typeof(ProjectCommands),
-                typeof(PlaybackCommands),
                 typeof(TextManipulationCommands),
                 typeof(SubtitleManipulationCommands),
-                typeof(TimelineCommands),
             };
             }
         }
@@ -42,7 +39,6 @@ namespace Maptz.Subtitler.Wpf.Engine.Commands
             foreach (var t in CommandProviders)
             {
                 services.AddSingleton(t);
-
             }
         }
 

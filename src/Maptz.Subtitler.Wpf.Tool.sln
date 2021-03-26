@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maptz.Subtitler.Wpf.EngineE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maptz.Subtitler.Wpf.VideoPlayer", "Maptz.Subtitler.Wpf.VideoPlayer\Maptz.Subtitler.Wpf.VideoPlayer.csproj", "{85E9EF55-66A8-4A1F-BDD4-692C05B7374D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{0CD4AA98-A8D3-4D5E-939D-138160EA334D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

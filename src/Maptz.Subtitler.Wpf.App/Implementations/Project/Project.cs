@@ -1,15 +1,15 @@
-using System.IO;
-using System.Text.Json;
+using Maptz.Subtitler.App;
+using Maptz.Subtitler.App.Projects;
 
-namespace Maptz.Subtitler.App.Projects
+namespace Maptz.Subtitler.Wpf.App
 {
     /// <summary>
     /// A project. 
     /// </summary>
-    public class Project : DirtyBase, IProject<ProjectDataBase, ProjectSettingsBase>
+    public class Project : DirtyBase, IProject
     {
-        private ProjectDataBase _projectData;
-        public ProjectDataBase ProjectData
+        private ProjectDataEx _projectData;
+        public ProjectDataEx ProjectData
         {
             get => this._projectData;
             set
@@ -24,8 +24,8 @@ namespace Maptz.Subtitler.App.Projects
             }
         }
 
-        private ProjectSettingsBase _projectSettings;
-        public ProjectSettingsBase ProjectSettings
+        private ProjectSettingsEx _projectSettings;
+        public ProjectSettingsEx ProjectSettings
         {
             get => this._projectSettings;
             set
@@ -62,8 +62,8 @@ namespace Maptz.Subtitler.App.Projects
 
         public Project()
         {
-            this.ProjectSettings = new ProjectSettingsBase();
-            this.ProjectData = new ProjectDataBase();
+            this.ProjectSettings = new ProjectSettingsEx();
+            this.ProjectData = new ProjectDataEx();
         }
     }
 }

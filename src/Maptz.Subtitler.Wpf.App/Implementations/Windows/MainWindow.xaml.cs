@@ -1,4 +1,5 @@
 ﻿using Maptz.Subtitler.App.Projects;
+using Maptz.Subtitler.Wpf.App.Commands;
 using Maptz.Subtitler.Wpf.Controls;
 using Maptz.Subtitler.Wpf.Engine;
 using Maptz.Subtitler.Wpf.Engine.Commands;
@@ -26,6 +27,7 @@ namespace Maptz.Subtitler.Wpf.App
         {
             var appCommands = this.ServiceProvider.GetRequiredService<AppCommands>();
             var projectCommands = this.ServiceProvider.GetRequiredService<ProjectCommands>();
+            var projectSettingsCommands = this.ServiceProvider.GetRequiredService<ProjectSettingsCommands>();
             var menu = this.x_Menu;
             var fm = new MenuItem()
             { Header = "_File" };
@@ -43,7 +45,7 @@ namespace Maptz.Subtitler.Wpf.App
             comm = projectCommands.SaveProjectAsCommand;
             fm.Items.Add(new MenuItem()
             { Header = "Save Project As", Command = comm, Icon = comm.IconSource?.GetIconElement() });
-            comm = projectCommands.ShowProjectSettingsCommand;
+            comm = projectSettingsCommands.ShowProjectSettingsCommand;
             fm.Items.Add(new MenuItem()
             { Header = "Project Settings", Command = comm, Icon = comm.IconSource?.GetIconElement() });
             comm = appCommands.ExitAppCommand;
