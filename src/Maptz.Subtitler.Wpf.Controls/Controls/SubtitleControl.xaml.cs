@@ -27,16 +27,17 @@ namespace Maptz.Subtitler.Wpf.Controls.Controls
 
         public int? CursorIndex
         {
-            get => this.x_TouchTextControl.CursorIndex;
-            set
-            {
-                var oldValue = this.x_TouchTextControl.CursorIndex;
-                if (oldValue != value)
-                {
-                    this.x_TouchTextControl.CursorIndex = value;
-                    this.OnCursorIndexChanged(oldValue, value);
-                }
-            }
+            get;set;
+            //get => this.x_TouchTextControl.CursorIndex;
+            //set
+            //{
+            //    var oldValue = this.x_TouchTextControl.CursorIndex;
+            //    if (oldValue != value)
+            //    {
+            //        this.x_TouchTextControl.CursorIndex = value;
+            //        this.OnCursorIndexChanged(oldValue, value);
+            //    }
+            //}
         }
 
         private void OnCursorIndexChanged(int? oldValue, int? value)
@@ -105,7 +106,7 @@ namespace Maptz.Subtitler.Wpf.Controls.Controls
 
         private void InvalidateText()
         {
-            this.x_TouchTextControl.Text = this.Item?.Content;
+            //this.x_TouchTextControl.Text = this.Item?.Content;
         }
 
         /* #endregion Private Methods */
@@ -169,10 +170,10 @@ namespace Maptz.Subtitler.Wpf.Controls.Controls
             this.InvalidateBorders();
             this.SetDisplay();
 
-            this.x_TouchTextControl.Click += (s, e) =>
-            {
-                this.OnClick(e.Index);
-            };
+            //this.x_TouchTextControl.Click += (s, e) =>
+            //{
+            //    this.OnClick(e.Index);
+            //};
         }
         /* #endregion Public Constructors */
 

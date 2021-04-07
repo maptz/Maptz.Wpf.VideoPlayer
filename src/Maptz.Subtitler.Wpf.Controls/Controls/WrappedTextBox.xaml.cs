@@ -200,46 +200,54 @@ namespace Maptz.QuickVideoPlayer
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            drawingContext.DrawRectangle(new SolidColorBrush(Colors.Black), null, new Rect(new Size(this.ActualWidth, this.ActualHeight)));
-            base.OnRender(drawingContext);
-            foreach (var highlightRegion in this.HighlightRegions)
+            try
             {
-                var region = highlightRegion;
-                var lineStart = this.x_TextEditor.Document.GetLineByOffset(highlightRegion.TextSpan.Start).LineNumber;
-                var lineEnd = this.x_TextEditor.Document.GetLineByOffset(highlightRegion.TextSpan.Start + highlightRegion.TextSpan.Length).LineNumber;
-                var viewPos = this.TranslatePoint(new Point(), this.x_TextEditor.TextArea.TextView);
-
-                var highlightBrush = this.GetBrush(highlightRegion);
-                for (int i = lineStart; i < lineEnd; i++)
+                drawingContext.DrawRectangle(new SolidColorBrush(Colors.Black), null, new Rect(new Size(this.ActualWidth, this.ActualHeight)));
+                base.OnRender(drawingContext);
+                foreach (var highlightRegion in this.HighlightRegions)
                 {
-                    var currentLine = this.x_TextEditor.Document.GetLineByNumber(i);
-                    foreach (var rect in BackgroundGeometryBuilder.GetRectsForSegment(this.x_TextEditor.TextArea.TextView, currentLine))
+                    var region = highlightRegion;
+                    var lineStart = this.x_TextEditor.Document.GetLineByOffset(highlightRegion.TextSpan.Start).LineNumber;
+                    var lineEnd = this.x_TextEditor.Document.GetLineByOffset(highlightRegion.TextSpan.Start + highlightRegion.TextSpan.Length).LineNumber;
+                    var viewPos = this.TranslatePoint(new Point(), this.x_TextEditor.TextArea.TextView);
+
+                    var highlightBrush = this.GetBrush(highlightRegion);
+                    for (int i = lineStart; i < lineEnd; i++)
                     {
-                        var wid = 3.0;
-                        var spacing = 2.0;
-                        var left = 0.0;
-                        switch (highlightRegion.Kind)
+                        var currentLine = this.x_TextEditor.Document.GetLineByNumber(i);
+                        foreach (var rect in BackgroundGeometryBuilder.GetRectsForSegment(this.x_TextEditor.TextArea.TextView, currentLine))
                         {
-                            case HighlightKind.Caret:
-                                left = rect.Location.X - viewPos.X - 3.0*(wid+spacing) - spacing;
-                                break;
-                            case HighlightKind.Hover:
-                                left = rect.Location.X - viewPos.X - 2.0 * (wid + spacing) - spacing;
-                                break;
-                            case HighlightKind.VideoCursor:
-                                left = rect.Location.X - viewPos.X - 1.0 * (wid + spacing) - spacing;
-                                break;
-                            default:
-                                throw new NotSupportedException();
+                            var wid = 3.0;
+                            var spacing = 2.0;
+                            var left = 0.0;
+                            switch (highlightRegion.Kind)
+                            {
+                                case HighlightKind.Caret:
+                                    left = rect.Location.X - viewPos.X - 3.0 * (wid + spacing) - spacing;
+                                    break;
+                                case HighlightKind.Hover:
+                                    left = rect.Location.X - viewPos.X - 2.0 * (wid + spacing) - spacing;
+                                    break;
+                                case HighlightKind.VideoCursor:
+                                    left = rect.Location.X - viewPos.X - 1.0 * (wid + spacing) - spacing;
+                                    break;
+                                default:
+                                    throw new NotSupportedException();
+                            }
+
+                            var loc = new Point(left, rect.Location.Y - viewPos.Y);
+                            var rect2 = new Rect(loc, new Size(wid, rect.Height));
+                            drawingContext.DrawRectangle(highlightBrush, null, rect2);
                         }
-
-                        var loc = new Point(left, rect.Location.Y - viewPos.Y);
-                        var rect2 = new Rect(loc, new Size(wid, rect.Height));
-                        drawingContext.DrawRectangle(highlightBrush, null, rect2);
                     }
-                }
 
+                }
             }
+            catch
+            {
+                //TODO fix issue ere
+            }
+
 
         }
         /* #endregion Public Methods */

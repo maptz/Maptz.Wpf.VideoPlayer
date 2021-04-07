@@ -22,7 +22,7 @@ namespace Maptz.QuickVideoPlayer.Commands
 
     public class CommandProviderBase : ICommandProvider
     {
-        public IEnumerable<IAppCommand> GetAllCommands()
+        public virtual IEnumerable<IAppCommand> GetAllCommands()
         {
             List<IAppCommand> retval = new List<IAppCommand>();
             var props = this.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
