@@ -1,18 +1,14 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Diagnostics;
+﻿using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Rendering;
 using Maptz.Editing.TimeCodeDocuments;
-using ICSharpCode.AvalonEdit;
-using System.Windows.Media;
-using ICSharpCode.AvalonEdit.Highlighting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ICSharpCode.AvalonEdit.Rendering;
-using ICSharpCode.AvalonEdit.Document;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
-namespace Maptz.QuickVideoPlayer
+namespace Maptz.Subtitler.Wpf.Controls
 {
 
     /// <summary>

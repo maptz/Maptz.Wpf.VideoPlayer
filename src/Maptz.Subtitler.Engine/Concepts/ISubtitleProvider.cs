@@ -1,7 +1,7 @@
 using Maptz.Editing.TimeCodeDocuments;
 using System.Threading.Tasks;
 
-namespace Maptz.QuickVideoPlayer
+namespace Maptz.Subtitler.Engine
 {
     public interface ISubtitleProvider
     {

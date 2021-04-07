@@ -1,5 +1,5 @@
-﻿using Maptz.QuickVideoPlayer;
-using Maptz.QuickVideoPlayer.Commands;
+﻿using Maptz.Subtitler.App.Commands;
+using Maptz.Subtitler.App.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Windows;

@@ -1,0 +1,26 @@
+﻿<Window x:Class="Maptz.Subtitler.Wpf.App.ProjectSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ProjectSettingsWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="Frame rate"></TextBlock>
+            <ComboBox x:Name="x_ComboBox_FrameRate" SelectedItem="{Binding FrameRate, Mode=TwoWay}" ItemsSource="{Binding AvailableFrameRates}"></ComboBox>
+
+            <TextBlock Text="Start TC"></TextBlock>
+            <TextBox x:Name="x_TextBox_Timecode" Text="{Binding TimeCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+            <TextBlock Text="Video file"></TextBlock>
+            <TextBlock x:Name="x_TextBloc_VideoFilePath" Text="{Binding VideoFilePath, Mode=TwoWay}"></TextBlock>
+            <Button x:Name="x_Button_SelectFile" Content="Video File..."></Button>
+        </StackPanel>
+
+        <StackPanel>
+            <Button x:Name="x_Button_OK" Content="Ok"></Button>
+            <Button x:Name="x_Button_Cancel" Content="Cancel"></Button>
+        </StackPanel>
+    </Grid>
+</Window>

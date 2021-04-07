@@ -1,8 +1,9 @@
-using Maptz.QuickVideoPlayer.Commands;
+using Maptz.Subtitler.App;
+using Maptz.Subtitler.App.Commands;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-namespace Maptz.QuickVideoPlayer
+namespace Maptz.Subtitler.Wpf.Controls
 {
 
     public class AppCommandButton : Button
